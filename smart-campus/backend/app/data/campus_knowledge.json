@@ -1,0 +1,66 @@
+[
+  {
+    "category": "university",
+    "name": "Smart Campus University",
+    "description": "DEMO data. Replace with the verified university name and profile.",
+    "location": "Demo campus",
+    "source": "Demo University Profile",
+    "keywords": ["university", "campus", "chuo", "college"]
+  },
+  {
+    "category": "schools",
+    "name": "School of Computing",
+    "description": "DEMO data. Replace with verified school information.",
+    "location": "Demo academic area",
+    "source": "Demo Academic Directory",
+    "keywords": ["school", "computing", "computer science", "kompyuta", "shule"]
+  },
+  {
+    "category": "departments",
+    "name": "Department of Information Technology",
+    "description": "DEMO data. Replace with verified department information.",
+    "location": "Demo academic area",
+    "source": "Demo Academic Directory",
+    "keywords": ["department", "information technology", "it", "teknolojia"]
+  },
+  {
+    "category": "campus_services",
+    "name": "University Library",
+    "description": "Demo campus information. Replace with verified university information.",
+    "location": "Demo location",
+    "source": "Demo Campus Directory",
+    "keywords": ["library", "maktaba", "books", "kusoma", "location", "wapi"]
+  },
+  {
+    "category": "locations",
+    "name": "Main Academic Block",
+    "description": "DEMO data. Replace with a verified campus map and location description.",
+    "location": "Demo campus",
+    "source": "Demo Campus Map",
+    "keywords": ["academic block", "building", "location", "where", "wapi"]
+  },
+  {
+    "category": "academic_information",
+    "name": "Academic Registration",
+    "description": "DEMO data. Verify registration dates, requirements, and procedures with the official registry.",
+    "location": "Demo registry office",
+    "source": "Demo Academic Information",
+    "keywords": ["registration", "register", "sajili", "academic", "semester"]
+  },
+  {
+    "category": "student_services",
+    "name": "Student Support Services",
+    "description": "DEMO data. Replace with verified student service offerings and contacts.",
+    "location": "Demo student services office",
+    "source": "Demo Student Services Directory",
+    "keywords": ["student services", "support", "students", "huduma", "wanafunzi"]
+  },
+  {
+    "category": "frequently_asked_questions",
+    "name": "Campus Information Verification",
+    "description": "This demo knowledge base is not an official university source. Confirm important information with the university.",
+    "location": "Not applicable",
+    "source": "Demo FAQ",
+    "keywords": ["official", "verify", "verified", "information", "faq"]
+  }
+]
