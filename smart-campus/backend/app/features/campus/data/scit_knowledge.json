@@ -2,9 +2,39 @@
   {
     "school_code": "SCIT",
     "school_name": "School of Computing & Information Technology",
+    "category": "Faculty & Leadership",
+    "name": "Dean, SCIT - Dr. George Musumba",
+    "description": "Dr. George Musumba is the Dean of the School of Computing & Information Technology (SCIT) at DeKUT. He leads academic vision, departmental research, computing curriculum development, student academic petitions, and faculty administration.",
+    "location": "Turing Building, 4th Floor Administrative Suite",
+    "source": "SCIT Dean's Office Directory",
+    "keywords": ["dean", "scit dean", "george musumba", "dr george musumba", "dr. george musumba", "dean computer science", "scit leadership"]
+  },
+  {
+    "school_code": "SCIT",
+    "school_name": "School of Computing & Information Technology",
+    "category": "Faculty & Leadership",
+    "name": "Chairman of Department (COD) - Computer Science",
+    "description": "The Chairman of Department (COD) for Computer Science manages CS course allocations, CAT/Exam moderation, student academic counseling, and thesis/project supervisor assignments.",
+    "location": "Turing Building, 3rd Floor COD Suite",
+    "source": "SCIT Department of Computer Science",
+    "keywords": ["cod", "cod computer science", "department chair", "cs chairman", "course allocation", "scit cod"]
+  },
+  {
+    "school_code": "SCIT",
+    "school_name": "School of Computing & Information Technology",
+    "category": "Faculty & Leadership",
+    "name": "Chairman of Department (COD) - Information Technology",
+    "description": "The Chairman of Department (COD) for Information Technology oversees IT degree curriculum, practical lab sessions, industry certifications, and student attachment placement.",
+    "location": "Turing Building, 3rd Floor COD Suite",
+    "source": "SCIT Department of IT",
+    "keywords": ["cod it", "cod information technology", "it chairman", "it department head", "scit cod"]
+  },
+  {
+    "school_code": "SCIT",
+    "school_name": "School of Computing & Information Technology",
     "category": "Academic Programs",
     "name": "BSc Computer Science",
-    "description": "The Bachelor of Science in Computer Science is a 4-year undergraduate program focusing on algorithms, software development, AI, theoretical computing, and systems design. Requires 120 credit units including a 4th-year Capstone Project.",
+    "description": "The Bachelor of Science in Computer Science is a 4-year undergraduate program focusing on algorithms, software development, AI, theoretical computing, operating systems, networks, and systems design.",
     "location": "Turing Building, Room 201",
     "source": "SCIT Curriculum Guide 2026",
     "keywords": ["computer science", "bsc cs", "degree", "algorithms", "software development", "programming", "scit"]
@@ -24,7 +54,7 @@
     "school_name": "School of Computing & Information Technology",
     "category": "Academic Programs",
     "name": "BSc Information Technology",
-    "description": "Focuses on IT infrastructure, database management, network administration, cybersecurity fundamentals, and enterprise IT service management.",
+    "description": "Focuses on IT infrastructure, database management, network administration, cybersecurity fundamentals, enterprise IT service management, and web technologies.",
     "location": "Turing Building, Room 105",
     "source": "SCIT IT Department Guide",
     "keywords": ["information technology", "it", "networks", "databases", "cybersecurity", "scit"]
@@ -34,7 +64,7 @@
     "school_name": "School of Computing & Information Technology",
     "category": "Academic Programs",
     "name": "MSc Computer Science & Data Science",
-    "description": "A 2-year postgraduate program offering advanced tracks in Machine Learning, Distributed Systems, Computer Vision, and Big Data Analytics.",
+    "description": "A 2-year postgraduate program offering advanced tracks in Machine Learning, Distributed Systems, Computer Vision, Big Data Analytics, and Cyber Security.",
     "location": "SCIT Graduate Studies Wing, Room 302",
     "source": "SCIT Postgraduate Handbook",
     "keywords": ["msc computer science", "postgraduate", "data science", "machine learning", "masters", "scit"]
@@ -44,7 +74,7 @@
     "school_name": "School of Computing & Information Technology",
     "category": "Facilities & Labs",
     "name": "Ada Lovelace AI & High-Performance Computing Lab",
-    "description": "State-of-the-art laboratory equipped with GPU clusters (NVIDIA RTX 4090s) reserved for AI/ML research, deep learning coursework, and student capstone projects.",
+    "description": "State-of-the-art laboratory equipped with GPU clusters reserved for AI/ML research, deep learning coursework, software engineering, and student capstone projects.",
     "location": "Ada Lovelace Hall, 3rd Floor",
     "source": "SCIT Facilities Management",
     "keywords": ["ai lab", "gpu", "machine learning", "ada lovelace", "hpc", "scit", "computing lab"]
@@ -58,16 +88,6 @@
     "location": "Turing Building, Ground Floor Lab 2",
     "source": "SCIT Lab Network Admin",
     "keywords": ["cisco lab", "networking", "cybersecurity lab", "ethical hacking", "ccna", "scit"]
-  },
-  {
-    "school_code": "SCIT",
-    "school_name": "School of Computing & Information Technology",
-    "category": "Faculty & Leadership",
-    "name": "SCIT Dean's Office & Faculty Leadership",
-    "description": "Office of the Dean of SCIT. Handles academic petitions, credit transfers, research grants, faculty advisement, and graduation clearance for computing students.",
-    "location": "Turing Building, 4th Floor Administrative Suite",
-    "source": "SCIT Administration Directory",
-    "keywords": ["dean", "scit dean", "administration", "faculty office", "credit transfer", "clearance"]
   },
   {
     "school_code": "SCIT",
@@ -88,6 +108,16 @@
     "location": "SCIT Attachment Office, Room 108",
     "source": "SCIT Internship Manual",
     "keywords": ["industrial attachment", "internship", "recess term", "logbook", "attachment clearance", "scit"]
+  },
+  {
+    "school_code": "SCIT",
+    "school_name": "School of Computing & Information Technology",
+    "category": "Past Papers & Study Assistance",
+    "name": "SCIT Past Examination Papers & Revision Guidance",
+    "description": "SCIT past papers for Programming (C++, Java, Python), Data Structures & Algorithms, Operating Systems, Database Systems, Computer Networks, and Software Engineering are hosted in the SCIT Student Resource Drive and DeKUT Library Repository. Revision strategy: practice pseudo-code writing, database schema normalization, and network subnetting calculations.",
+    "location": "SCIT Resource Portal & Turing Lab 1 Drive",
+    "source": "SCIT Academic Resource Board",
+    "keywords": ["scit past papers", "past papers", "programming past papers", "revision", "exam questions", "algorithms", "data structures", "cats"]
   },
   {
     "school_code": "SCIT",

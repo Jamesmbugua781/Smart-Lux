@@ -22,33 +22,12 @@ class ChatService:
     async def generate_response(self, request: ChatRequest) -> ChatResponse:
         context = self.retrieval_service.search(request.message)
 
-        # -------------------------------------------------------------------
-        # Confidence / "I Don't Know" Fallback Mechanism
-        # -------------------------------------------------------------------
-        if not context:
-            is_swahili = request.language.lower().startswith('sw')
-            fallback_msg = (
-                "Samahani, sikupata taarifa zilizothibitishwa za chuo kuhusu swali lako. "
-                "Tafadhali wasiliana na dawati la huduma za wanafunzi au ofisi ya usajili kwa msaada zaidi."
-                if is_swahili
-                else "I could not find verified university information regarding your question. "
-                "Please contact the campus helpdesk or registry office for official assistance."
-            )
-            return ChatResponse(
-                message=fallback_msg,
-                language=request.language,
-                is_verified=False,
-                confidence=0.0,
-                sources=[],
-                suggestions=self._suggestions(request.language),
-            )
-
         # Convert history schema to dictionary list for AIService
         history_dicts = [
             {'role': item.role, 'content': item.content} for item in request.history
         ]
 
-        # Call AI Provider with RAG Context + Multi-Turn History
+        # Call AI Provider with RAG Context (if any) + Multi-Turn History
         result = await self.ai_service.generate_answer(
             question=request.message,
             language=request.language,
@@ -59,21 +38,28 @@ class ChatService:
         # -------------------------------------------------------------------
         # Citation & Source Attribution
         # -------------------------------------------------------------------
-        sources = [
-            Source(
-                source=entry.get('source', 'Campus Directory'),
-                title=entry.get('name', 'Campus Entry'),
-                snippet=entry.get('description', '')[:150] + ('...' if len(entry.get('description', '')) > 150 else ''),
-                confidence=round(min(1.0, 0.8 + 0.1 * idx), 2),
-            )
-            for idx, entry in enumerate(context)
-        ]
+        if context:
+            sources = [
+                Source(
+                    source=entry.get('source', 'Campus Directory'),
+                    title=entry.get('name', 'Campus Entry'),
+                    snippet=entry.get('description', '')[:150] + ('...' if len(entry.get('description', '')) > 150 else ''),
+                    confidence=round(min(1.0, 0.8 + 0.1 * idx), 2),
+                )
+                for idx, entry in enumerate(context)
+            ]
+            is_verified = True
+            confidence = 0.95
+        else:
+            sources = []
+            is_verified = False
+            confidence = 0.80
 
         return ChatResponse(
             message=result,
             language=request.language,
-            is_verified=True,
-            confidence=0.95,
+            is_verified=is_verified,
+            confidence=confidence,
             sources=sources,
             suggestions=self._suggestions(request.language),
         )

@@ -35,9 +35,9 @@ from app.features.health.router import router as health_router
 limiter = Limiter(key_func=get_remote_address, default_limits=[settings.RATE_LIMIT])
 
 app = FastAPI(
-    title='Smart Campus Assistant API',
+    title='Smart Lux API',
     version='0.1.0',
-    description='Prototype backend for the Smart Campus Assistant platform.',
+    description='Backend API for Smart Lux assistant platform.',
 )
 
 # -- State required by slowapi --
@@ -69,4 +69,4 @@ app.include_router(academics_router,     prefix='/api')
 
 @app.get('/')
 async def root() -> dict[str, str]:
-    return {'message': 'Smart Campus Assistant API is running.'}
+    return {'message': 'Smart Lux API is running.'}

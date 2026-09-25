@@ -38,11 +38,14 @@ export function ChatPage() {
       const updated = [...current, userMessage]
       return updated
     })
+    setError('')
     setIsLoading(true)
 
     try {
       // Build history from existing messages for multi-turn memory
-      const history = messages.map((m) => ({ role: m.role, content: m.text }))
+      const history = messages
+        .filter((m) => Boolean(m.text && m.text.trim()))
+        .map((m) => ({ role: m.role, content: m.text.trim() }))
       const response = await sendChatMessage(message, 'en', history)
       setMessages((current) => [...current, {
         id: crypto.randomUUID(),
@@ -141,7 +144,7 @@ export function ChatPage() {
 
           <div className="border-t border-[#edf0f2] bg-white px-4 py-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl">
-              <ChatInput placeholder="Ask Smart Campus..." value={input} onChange={setInput} onSubmit={() => submitMessage()} disabled={isLoading} />
+              <ChatInput placeholder="Ask Smart Lux..." value={input} onChange={setInput} onSubmit={() => submitMessage()} disabled={isLoading} />
             </div>
           </div>
           <Footer />

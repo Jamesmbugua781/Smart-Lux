@@ -64,10 +64,10 @@ class RetrievalService:
             close_session = True
 
         try:
-            # Seed General Campus Knowledge
-            count_campus = db.query(CampusKnowledge).count()
-            if count_campus == 0 and self.knowledge_path.exists():
-                logger.info('Seeding campus_knowledge table from %s...', self.knowledge_path)
+            # Sync General Campus Knowledge from JSON
+            if self.knowledge_path.exists():
+                db.query(CampusKnowledge).delete()
+                logger.info('Syncing campus_knowledge table from %s...', self.knowledge_path)
                 with self.knowledge_path.open(encoding='utf-8') as f:
                     entries = json.load(f)
 
@@ -86,10 +86,10 @@ class RetrievalService:
                     )
                     db.add(db_entry)
 
-            # Seed School Knowledge (SCIT)
-            count_school = db.query(SchoolKnowledge).count()
-            if count_school == 0 and self.scit_knowledge_path.exists():
-                logger.info('Seeding school_knowledge (SCIT) table from %s...', self.scit_knowledge_path)
+            # Sync School Knowledge (SCIT) from JSON
+            if self.scit_knowledge_path.exists():
+                db.query(SchoolKnowledge).delete()
+                logger.info('Syncing school_knowledge (SCIT) table from %s...', self.scit_knowledge_path)
                 with self.scit_knowledge_path.open(encoding='utf-8') as f:
                     scit_entries = json.load(f)
 

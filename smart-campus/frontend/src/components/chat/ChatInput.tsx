@@ -10,10 +10,11 @@ interface ChatInputProps {
   disabled?: boolean
 }
 
-export function ChatInput({ placeholder = 'Ask Smart Campus...', value, onChange, onSubmit, disabled }: ChatInputProps) {
+export function ChatInput({ placeholder = 'Ask Smart Lux...', value, onChange, onSubmit, disabled }: ChatInputProps) {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
+      if (!value.trim() || disabled) return
       onSubmit()
     }
   }

@@ -31,7 +31,7 @@ export function HomePage() {
         <section className="overflow-hidden rounded-[30px] border border-[#eaeef2] bg-[#ffffff] px-5 py-8 shadow-[0_18px_50px_rgba(11,31,58,0.04)] sm:px-8 lg:px-12 lg:py-12">
           <div className="grid items-center gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:gap-10">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--color-primary)]">SMART CAMPUS ASSISTANT</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--color-primary)]">SMART LUX</p>
               <h1 className="mt-4 text-4xl font-semibold leading-none tracking-[-0.06em] sm:text-5xl lg:text-6xl">
                 Your campus.
                 <span className="mt-2 block text-[#0B1F33]">

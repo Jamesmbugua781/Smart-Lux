@@ -1,66 +1,98 @@
 [
   {
-    "category": "university",
-    "name": "Smart Campus University",
-    "description": "DEMO data. Replace with the verified university name and profile.",
-    "location": "Demo campus",
-    "source": "Demo University Profile",
-    "keywords": ["university", "campus", "chuo", "college"]
+    "category": "University Leadership",
+    "name": "Vice Chancellor - Prof. Peter N. Muchiri",
+    "description": "Prof. Peter N. Muchiri is the Vice Chancellor of Dedan Kimathi University of Technology (DeKUT). He oversees university policy, strategic leadership, academic governance, and institutional growth.",
+    "location": "Main Administration Block, VC Wing",
+    "source": "DeKUT Executive Leadership Directory",
+    "keywords": ["vice chancellor", "vc", "peter muchiri", "prof peter muchiri", "head of university", "administration", "dekut leadership"]
   },
   {
-    "category": "schools",
-    "name": "School of Computing",
-    "description": "DEMO data. Replace with verified school information.",
-    "location": "Demo academic area",
-    "source": "Demo Academic Directory",
-    "keywords": ["school", "computing", "computer science", "kompyuta", "shule"]
+    "category": "University Leadership",
+    "name": "DVC Academic Affairs & Research - Prof. Esther N. Magiri",
+    "description": "Prof. Esther N. Magiri serves as the Deputy Vice Chancellor (Academic Affairs & Research). She oversees all academic programs, curricula, examinations, admissions, and research projects across all schools.",
+    "location": "Main Administration Block, DVC AA Wing",
+    "source": "DeKUT Academic Administration",
+    "keywords": ["dvc", "dvc academic affairs", "esther magiri", "prof esther magiri", "academic head", "research", "dekut"]
   },
   {
-    "category": "departments",
-    "name": "Department of Information Technology",
-    "description": "DEMO data. Replace with verified department information.",
-    "location": "Demo academic area",
-    "source": "Demo Academic Directory",
-    "keywords": ["department", "information technology", "it", "teknolojia"]
+    "category": "University Profile",
+    "name": "Dedan Kimathi University of Technology (DeKUT)",
+    "description": "Dedan Kimathi University of Technology (DeKUT) is a premier public university in Kenya, situated in Nyeri along the Nyeri-Nyahururu Highway. Renowned for technology, engineering, computing, innovation, science, and entrepreneurial research.",
+    "location": "Nyeri, Kenya (Main Campus)",
+    "source": "DeKUT Official University Charter",
+    "keywords": ["dekut", "dedan kimathi university", "kimathi university", "nyeri campus", "location", "about dekut"]
   },
   {
-    "category": "campus_services",
-    "name": "University Library",
-    "description": "Demo campus information. Replace with verified university information.",
-    "location": "Demo location",
-    "source": "Demo Campus Directory",
-    "keywords": ["library", "maktaba", "books", "kusoma", "location", "wapi"]
+    "category": "University Administration",
+    "name": "Registrar Academic Affairs & Examinations",
+    "description": "The Office of the Registrar (Academic Affairs & Research) manages student admissions, course registration, exam timetables, transcripts, student records, and graduation clearance.",
+    "location": "Main Administration Block, Ground Floor",
+    "source": "DeKUT Registry",
+    "keywords": ["registrar", "academic affairs", "transcripts", "admissions", "exam timetable", "graduation clearance", "registry"]
   },
   {
-    "category": "locations",
-    "name": "Main Academic Block",
-    "description": "DEMO data. Replace with a verified campus map and location description.",
-    "location": "Demo campus",
-    "source": "Demo Campus Map",
-    "keywords": ["academic block", "building", "location", "where", "wapi"]
+    "category": "Student Welfare",
+    "name": "Dean of Students & Student Welfare Office",
+    "description": "The Dean of Students office coordinates student welfare, counseling, clubs & societies, sports, financial aid/bursaries, student leadership (DeKUTSO), and campus life.",
+    "location": "Student Resource Center, 1st Floor",
+    "source": "DeKUT Student Affairs Department",
+    "keywords": ["dean of students", "student welfare", "counseling", "bursary", "dekutso", "clubs", "sports"]
   },
   {
-    "category": "academic_information",
-    "name": "Academic Registration",
-    "description": "DEMO data. Verify registration dates, requirements, and procedures with the official registry.",
-    "location": "Demo registry office",
-    "source": "Demo Academic Information",
-    "keywords": ["registration", "register", "sajili", "academic", "semester"]
+    "category": "School Rules & Regulations",
+    "name": "Lecture Attendance Policy (75% Rule)",
+    "description": "All DeKUT students must attend a minimum of 75% of scheduled lectures and practical sessions in every unit to be eligible to sit for end-of-semester main examinations. Attendance is audited prior to exam card issuance.",
+    "location": "DeKUT Academic Policy Handbook",
+    "source": "DeKUT Senate Academic Regulations",
+    "keywords": ["attendance rule", "75% attendance", "class attendance", "rules", "exam eligibility", "regulations"]
   },
   {
-    "category": "student_services",
-    "name": "Student Support Services",
-    "description": "DEMO data. Replace with verified student service offerings and contacts.",
-    "location": "Demo student services office",
-    "source": "Demo Student Services Directory",
-    "keywords": ["student services", "support", "students", "huduma", "wanafunzi"]
+    "category": "School Rules & Regulations",
+    "name": "DeKUT University Grading System",
+    "description": "DeKUT operating grading scale: 70% – 100% = Grade A (First Class honors standard); 60% – 69% = Grade B; 50% – 59% = Grade C; 40% – 49% = Grade D (Pass); Below 40% = Grade E (Fail / Mandatory Retake). CATs contribute 30% and Main Exam 70%.",
+    "location": "DeKUT Examinations Board",
+    "source": "DeKUT Student Academic Handbook",
+    "keywords": ["grading system", "grades", "grade a", "pass mark", "marks", "gpa", "cats score", "exam marks", "retake"]
   },
   {
-    "category": "frequently_asked_questions",
-    "name": "Campus Information Verification",
-    "description": "This demo knowledge base is not an official university source. Confirm important information with the university.",
-    "location": "Not applicable",
-    "source": "Demo FAQ",
-    "keywords": ["official", "verify", "verified", "information", "faq"]
+    "category": "School Rules & Regulations",
+    "name": "Examination Integrity & Disciplinary Code",
+    "description": "DeKUT maintains zero tolerance for academic dishonesty. Bringing mobile phones, smartwatches, unauthorized notes into exam halls, or engaging in plagiarism results in immediate disciplinary hearing, zero grade, and potential suspension/expulsion.",
+    "location": "DeKUT Disciplinary Board",
+    "source": "DeKUT Student Code of Conduct",
+    "keywords": ["exam cheating", "disciplinary code", "rules", "plagiarism", "suspension", "exam hall rules"]
+  },
+  {
+    "category": "Campus Facilities",
+    "name": "DeKUT Main Library & Resource Center",
+    "description": "Modern multi-storey resource center with physical books, computer labs, high-speed Wi-Fi, e-journals, quiet study zones, and repository access. Open Mon–Fri: 8:00 AM – 10:00 PM; Sat: 8:00 AM – 5:00 PM.",
+    "location": "Central Campus, opposite Administration Block",
+    "source": "DeKUT Library Services",
+    "keywords": ["library", "maktaba", "opening hours", "e-resources", "past papers repository", "study space", "books"]
+  },
+  {
+    "category": "Digital Services",
+    "name": "DeKUT Student Portal & E-Learning (LMS)",
+    "description": "Students register units, check fee balances, view exam results, and download course notes via portal.dkut.ac.ke and dedicated Moodle E-Learning platform.",
+    "location": "Online portal (portal.dkut.ac.ke)",
+    "source": "DeKUT ICT Services",
+    "keywords": ["student portal", "portal", "e-learning", "moodle", "unit registration", "fee status", "results portal"]
+  },
+  {
+    "category": "Events & Campus Life",
+    "name": "DeKUT Annual Innovation & STEM Week",
+    "description": "A premier flagship event where students, innovators, and industry partners showcase software applications, robotics, AI systems, and engineering solutions to judges and investors.",
+    "location": "DeKUT Dome & Innovation Hub",
+    "source": "DeKUT Directorate of Innovation & Incubation",
+    "keywords": ["innovation week", "stem week", "hackathon", "exhibition", "events", "tech expo", "robotics"]
+  },
+  {
+    "category": "Past Papers & Exam Guidance",
+    "name": "DeKUT Past Papers Repository & Exam Revision Advice",
+    "description": "Past semester examination papers are archived on repository.dkut.ac.ke and departmental Google Drives. Effective revision strategy: solve last 3 years of papers, focus on core CAT topics (30%), and practice time-budgeting (3 hours per 70-mark paper).",
+    "location": "DeKUT Library Repository & Departmental Drives",
+    "source": "DeKUT Academic Resource Repository",
+    "keywords": ["past papers", "exam revision", "revision bank", "cats", "past exams", "sample questions", "exam tips"]
   }
 ]

@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8', case_sensitive=False)
 
-    APP_NAME: str = 'Smart Campus Assistant'
+    APP_NAME: str = 'Smart Lux'
     APP_VERSION: str = '0.1.0'
     DATABASE_URL: str = 'postgresql://postgres:postgres@localhost:5432/smart_campus'
 
@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     GROK_MODEL: str = 'llama-3.3-70b-versatile'
     GROK_BASE_URL: str = 'https://api.groq.com/openai/v1'
 
-    CORS_ORIGINS: list[str] = ['http://localhost:5173']
+    CORS_ORIGINS: list[str] = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000', 'http://127.0.0.1:3000']
     # Brute-force / rate-limit (slowapi format: "N/period")
     RATE_LIMIT: str = '10/minute'
 
