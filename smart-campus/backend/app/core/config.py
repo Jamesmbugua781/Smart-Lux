@@ -6,10 +6,29 @@ class Settings(BaseSettings):
 
     APP_NAME: str = 'Smart Campus Assistant'
     APP_VERSION: str = '0.1.0'
-    DATABASE_URL: str = 'sqlite:///./smart_campus.db'
-    AI_API_KEY: str = ''
+    DATABASE_URL: str = 'postgresql://postgres:postgres@localhost:5432/smart_campus'
+
+    # AI Provider Selection: 'gemini' or 'grok'
+    AI_PROVIDER: str = 'gemini'
+
+    # Gemini API Configuration
+    GEMINI_API_KEY: str = ''
+    AI_API_KEY: str = ''  # Fallback/alias for GEMINI_API_KEY
     AI_MODEL: str = 'gemini-2.5-flash'
+
+    # Grok (xAI) API Configuration
+    GROK_API_KEY: str = ''
+    GROK_MODEL: str = 'llama-3.3-70b-versatile'
+    GROK_BASE_URL: str = 'https://api.groq.com/openai/v1'
+
     CORS_ORIGINS: list[str] = ['http://localhost:5173']
+    # Brute-force / rate-limit (slowapi format: "N/period")
+    RATE_LIMIT: str = '10/minute'
+
+    @property
+    def effective_gemini_api_key(self) -> str:
+        return self.GEMINI_API_KEY or self.AI_API_KEY
 
 
 settings = Settings()
+
