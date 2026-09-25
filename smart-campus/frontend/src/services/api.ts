@@ -21,6 +21,7 @@ export interface ChatSource {
 export interface ChatResponse {
   message: string
   language: string
+  session_id?: string
   is_verified: boolean
   confidence: number
   sources: ChatSource[]
@@ -31,16 +32,47 @@ export async function sendChatMessage(
   message: string,
   language = 'en',
   history: Array<{ role: string; content: string }> = [],
+  sessionId?: string | null,
+  institutionId = 'dekut',
+  authToken?: string | null,
 ): Promise<ChatResponse> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (authToken) {
+    headers['Authorization'] = `Bearer ${authToken}`
+  }
+
   const response = await fetch(`${API_BASE_URL}/api/chat`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message, language, history }),
+    headers,
+    body: JSON.stringify({ message, language, history, session_id: sessionId, institution_id: institutionId }),
   })
 
   if (!response.ok) throw new Error('Chat request failed')
   return response.json() as Promise<ChatResponse>
 }
+
+export async function fetchSessionsApi(institutionId = 'dekut', authToken?: string | null) {
+  const headers: Record<string, string> = {}
+  if (authToken) {
+    headers['Authorization'] = `Bearer ${authToken}`
+  }
+  const response = await fetch(`${API_BASE_URL}/api/chat/sessions?institution_id=${institutionId}`, { headers })
+  if (!response.ok) return []
+  return response.json()
+}
+
+export async function fetchSessionMessagesApi(sessionId: string) {
+  const response = await fetch(`${API_BASE_URL}/api/chat/sessions/${sessionId}`)
+  if (!response.ok) throw new Error('Failed to load session messages')
+  return response.json()
+}
+
+export async function deleteSessionApi(sessionId: string) {
+  const response = await fetch(`${API_BASE_URL}/api/chat/sessions/${sessionId}`, { method: 'DELETE' })
+  if (!response.ok) throw new Error('Failed to delete session')
+  return response.json()
+}
+
 
 export async function fetchHealth() {
   const response = await fetch(`${API_BASE_URL}/api/health`)
@@ -96,3 +128,142 @@ export async function fetchAcademics(): Promise<AcademicSection[]> {
     items: section.items.map((label) => ({ label })),
   }))
 }
+
+// ---------------------------------------------------------------------------
+// Authentication & Multi-Tenant Institution APIs
+// ---------------------------------------------------------------------------
+export async function loginApi(email: string, password: string): Promise<import('../types').AuthTokenResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  })
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}))
+    throw new Error(data.detail || 'Invalid login credentials')
+  }
+  return response.json()
+}
+
+export async function registerApi(
+  email: string,
+  password: string,
+  fullName: string,
+  institutionId = 'dekut',
+  role = 'student',
+): Promise<import('../types').AuthTokenResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password, full_name: fullName, institution_id: institutionId, role }),
+  })
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}))
+    throw new Error(data.detail || 'Registration failed')
+  }
+  return response.json()
+}
+
+export async function googleAuthApi(
+  token: string,
+  email: string,
+  fullName = '',
+  avatarUrl = '',
+  institutionId = 'dekut',
+): Promise<import('../types').AuthTokenResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/auth/google`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, email, full_name: fullName, avatar_url: avatarUrl, institution_id: institutionId }),
+  })
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}))
+    throw new Error(data.detail || 'Google sign-in failed')
+  }
+  return response.json()
+}
+
+export async function fetchCurrentMe(authToken: string): Promise<import('../types').User> {
+  const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+    headers: { Authorization: `Bearer ${authToken}` },
+  })
+  if (!response.ok) throw new Error('Failed to fetch user profile')
+  return response.json()
+}
+
+export async function fetchInstitutionsApi(): Promise<import('../types').Institution[]> {
+  const response = await fetch(`${API_BASE_URL}/api/auth/institutions`)
+  if (!response.ok) throw new Error('Failed to fetch institutions')
+  return response.json()
+}
+
+// ---------------------------------------------------------------------------
+// Institution Admin Document Upload & Management APIs
+// ---------------------------------------------------------------------------
+export async function uploadAdminTextDocApi(
+  filename: string,
+  content: string,
+  fileType = 'txt',
+  institutionId = 'dekut',
+  authToken?: string | null,
+) {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (authToken) headers['Authorization'] = `Bearer ${authToken}`
+
+  const response = await fetch(`${API_BASE_URL}/api/admin/documents/upload-text`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ filename, content, file_type: fileType, institution_id: institutionId }),
+  })
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}))
+    throw new Error(data.detail || 'Document upload failed')
+  }
+  return response.json()
+}
+
+export async function fetchAdminDocsApi(institutionId = 'dekut', authToken?: string | null) {
+  const headers: Record<string, string> = {}
+  if (authToken) headers['Authorization'] = `Bearer ${authToken}`
+
+  const response = await fetch(`${API_BASE_URL}/api/admin/documents?institution_id=${institutionId}`, { headers })
+  if (!response.ok) return []
+  return response.json()
+}
+
+export async function deleteAdminDocApi(documentId: string, authToken?: string | null) {
+  const headers: Record<string, string> = {}
+  if (authToken) headers['Authorization'] = `Bearer ${authToken}`
+
+  const response = await fetch(`${API_BASE_URL}/api/admin/documents/${documentId}`, {
+    method: 'DELETE',
+    headers,
+  })
+  if (!response.ok) throw new Error('Failed to delete document')
+  return response.json()
+}
+
+export async function createInstitutionApi(
+  id: string,
+  code: string,
+  name: string,
+  city: string,
+  description: string,
+  authToken?: string | null,
+) {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (authToken) headers['Authorization'] = `Bearer ${authToken}`
+
+  const response = await fetch(`${API_BASE_URL}/api/admin/institutions`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ id, code, name, city, description }),
+  })
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}))
+    throw new Error(data.detail || 'Failed to create institution')
+  }
+  return response.json()
+}
+
+

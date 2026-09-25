@@ -56,14 +56,9 @@ body {
 
 main {
   flex: 1;
-  padding-bottom: 6.5rem;
+  padding-bottom: 2rem;
 }
 
-@media (min-width: 768px) {
-  main {
-    padding-bottom: 2rem;
-  }
-}
 
 button,
 input {

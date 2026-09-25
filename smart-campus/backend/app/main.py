@@ -26,7 +26,9 @@ from slowapi.util import get_remote_address
 from app.core.config import settings
 from app.core.security import SecurityHeadersMiddleware
 from app.features.academics.router import router as academics_router
+from app.features.admin.router import router as admin_router
 from app.features.announcements.router import router as announcements_router
+from app.features.auth.router import router as auth_router
 from app.features.campus.router import router as campus_router
 from app.features.campus.school_router import router as school_router
 from app.features.chat.router import router as chat_router
@@ -83,6 +85,8 @@ app.add_middleware(
 # Feature routers – all under /api prefix
 # ---------------------------------------------------------------------------
 app.include_router(health_router,        prefix='/api')
+app.include_router(auth_router,          prefix='/api')
+app.include_router(admin_router,         prefix='/api')
 app.include_router(chat_router,          prefix='/api')
 app.include_router(campus_router,        prefix='/api')
 app.include_router(school_router,        prefix='/api')

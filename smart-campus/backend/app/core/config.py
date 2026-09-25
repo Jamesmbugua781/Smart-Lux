@@ -6,7 +6,7 @@ class Settings(BaseSettings):
 
     APP_NAME: str = 'Smart Lux'
     APP_VERSION: str = '0.1.0'
-    DATABASE_URL: str = 'postgresql://postgres:postgres@localhost:5432/smart_campus'
+    DATABASE_URL: str = 'postgresql://daxit@/smart_campus_db'
 
     # AI Provider Selection: 'gemini' or 'grok'
     AI_PROVIDER: str = 'gemini'

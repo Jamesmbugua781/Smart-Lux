@@ -52,6 +52,8 @@ class Source(BaseModel):
 class ChatRequest(BaseModel):
     message: str = Field(default='Hello', max_length=2000)
     language: str = Field(default='en', max_length=10)
+    session_id: str | None = Field(default=None, max_length=100)
+    institution_id: str = Field(default='dekut', max_length=50)
     history: list[ChatMessage] = Field(default_factory=list)  # Conversation memory
 
     @field_validator('history')
@@ -76,7 +78,9 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     message: str
     language: str
+    session_id: str | None = None
     is_verified: bool = True
     confidence: float = 1.0
     sources: list[Source] = Field(default_factory=list)
     suggestions: list[str] = Field(default_factory=list)
+

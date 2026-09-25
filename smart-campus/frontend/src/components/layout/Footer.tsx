@@ -17,6 +17,7 @@ export function Footer() {
             <Link className="action-link" to="/campus?query=ict">Contact ICT Help Desk</Link>
           </div>
           <p>© {currentYear} SMART LUX. All rights reserved.</p>
+          
         </div>
       </div>
     </footer>

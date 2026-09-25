@@ -1,18 +1,55 @@
-import { MessageSquareText, Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { MessageSquareText, Plus, Trash2 } from 'lucide-react'
+import { useAuth } from '../auth/AuthContext'
+import { deleteSessionApi, fetchSessionsApi } from '../../services/api'
 import { Brand } from './Brand'
 
-const recentConversations = [
-  { label: 'Library information', prompt: 'Where is the library and what services are available?' },
-  { label: 'Course registration', prompt: 'How do I register for courses?' },
-  { label: 'Campus locations', prompt: 'Show me important campus locations.' },
-]
-
-interface SidebarProps {
-  onNewConversation: () => void
-  onSelectConversation: (prompt: string) => void
+export interface ChatSessionItem {
+  id: string
+  title: string
+  created_at?: string
 }
 
-export function Sidebar({ onNewConversation, onSelectConversation }: SidebarProps) {
+interface SidebarProps {
+  currentSessionId?: string | null
+  onNewConversation: () => void
+  onSelectSession: (sessionId: string) => void
+}
+
+export function Sidebar({ currentSessionId, onNewConversation, onSelectSession }: SidebarProps) {
+  const { token, activeInstitution } = useAuth()
+  const [sessions, setSessions] = useState<ChatSessionItem[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
+  const loadSessions = async () => {
+    try {
+      setIsLoading(true)
+      const data = await fetchSessionsApi(activeInstitution, token)
+      setSessions(data || [])
+    } catch {
+      setSessions([])
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    void loadSessions()
+  }, [token, activeInstitution, currentSessionId])
+
+  const handleDeleteSession = async (e: React.MouseEvent, sessionId: string) => {
+    e.stopPropagation()
+    try {
+      await deleteSessionApi(sessionId)
+      setSessions((prev) => prev.filter((s) => s.id !== sessionId))
+      if (currentSessionId === sessionId) {
+        onNewConversation()
+      }
+    } catch (err) {
+      console.warn('Failed to delete session:', err)
+    }
+  }
+
   return (
     <aside className="hidden w-[280px] shrink-0 border-r border-[#edf0f2] bg-[#f7faf8] lg:flex lg:flex-col">
       <div className="flex items-center justify-between border-b border-[#edf0f2] px-5 py-5">
@@ -30,20 +67,48 @@ export function Sidebar({ onNewConversation, onSelectConversation }: SidebarProp
         </button>
       </div>
 
-      <div className="px-4">
-        <p className="px-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Recent conversations</p>
-        <div className="mt-3 space-y-2">
-          {recentConversations.map((item) => (
-            <button
-              key={item.label}
-              type="button"
-              onClick={() => onSelectConversation(item.prompt)}
-              className="flex w-full items-center gap-3 rounded-xl border border-transparent bg-white px-3 py-3 text-left text-sm text-[#0B1F3A] shadow-sm transition hover:border-[#dfe7ee] hover:bg-[#f5f7f8]"
-            >
-              <MessageSquareText size={15} className="text-[var(--color-primary)]" />
-              <span>{item.label}</span>
-            </button>
-          ))}
+      <div className="px-4 flex-1 overflow-y-auto">
+        <div className="flex items-center justify-between px-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">History Memory</p>
+          {isLoading ? <span className="text-[10px] text-slate-400">Loading...</span> : null}
+        </div>
+
+        <div className="mt-3 space-y-1.5">
+          {sessions.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-slate-200 bg-white p-3 text-center text-xs text-slate-400">
+              No saved history yet. Ask Smart Lux a question to start.
+            </div>
+          ) : (
+            sessions.map((item) => {
+              const isSelected = currentSessionId === item.id
+
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => onSelectSession(item.id)}
+                  className={`group relative flex cursor-pointer items-center justify-between rounded-xl border px-3 py-2.5 text-xs transition ${
+                    isSelected
+                      ? 'border-[var(--color-primary)] bg-white text-[var(--color-primary)] shadow-sm font-semibold'
+                      : 'border-transparent bg-white/80 text-[#0B1F3A] hover:border-[#dfe7ee] hover:bg-white'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                    <MessageSquareText size={15} className="shrink-0 text-[var(--color-primary)]" />
+                    <span className="truncate">{item.title}</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={(e) => handleDeleteSession(e, item.id)}
+                    className="opacity-0 group-hover:opacity-100 rounded-lg p-1 text-slate-400 hover:bg-red-50 hover:text-red-600 transition shrink-0"
+                    title="Delete session"
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </div>
+              )
+            })
+          )}
         </div>
       </div>
     </aside>
