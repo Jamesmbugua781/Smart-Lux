@@ -15,7 +15,7 @@
   --color-pin-registry: #8b5cf6;
   --color-pin-ict: #06b6d4;
 
-  font-family: 'Mona Sans Variable', 'Mona Sans', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Inter', 'Mona Sans Variable', 'Mona Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: var(--color-ink);
