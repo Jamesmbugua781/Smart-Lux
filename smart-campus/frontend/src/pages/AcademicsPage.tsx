@@ -1,9 +1,12 @@
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
 import { PageHeader } from '../components/ui/PageHeader'
-import { academicSections } from '../data/academics'
+import { fetchAcademics } from '../services/api'
+import type { AcademicSection } from '../types'
+import { LoadingState } from '../components/ui/LoadingState'
 
 const academicTargets: Record<string, { label: string; to: string }> = {
   calendar: { label: 'Ask about calendar', to: '/chat?question=What%20is%20on%20the%20academic%20calendar%3F' },
@@ -14,6 +17,15 @@ const academicTargets: Record<string, { label: string; to: string }> = {
 }
 
 export function AcademicsPage() {
+  const [academicSections, setAcademicSections] = useState<AcademicSection[]>([])
+  const [loadError, setLoadError] = useState('')
+
+  useEffect(() => {
+    fetchAcademics()
+      .then(setAcademicSections)
+      .catch(() => setLoadError('Academic information could not be loaded.'))
+  }, [])
+
   return (
     <div className="min-h-screen bg-[#F8F8F5]">
       <Navbar />
@@ -24,6 +36,9 @@ export function AcademicsPage() {
             title="Academic Information"
             subtitle="Structured academic guidance for students, departments, and staff support."
           />
+
+          {loadError ? <p className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{loadError}</p> : null}
+          {!loadError && academicSections.length === 0 ? <LoadingState /> : null}
 
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {academicSections.map((section) => {

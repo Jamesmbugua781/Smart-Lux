@@ -16,6 +16,10 @@ class CampusLocationResponse(BaseModel):
     description: str
     badge: str
     area: str
+    location_type: str
+    coordinates: dict[str, float]
+    building_id: str | None = None
+    external_url: str | None = None
 
 
 class KnowledgeItemCreate(BaseModel):

@@ -1,5 +1,6 @@
 import { ArrowRight, Search, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { CampusMap } from '../components/CampusMap'
 import { MapLegend } from '../components/MapLegend'
@@ -9,24 +10,45 @@ import { PageHeader } from '../components/ui/PageHeader'
 import { LocationCard } from '../components/campus/LocationCard'
 import { Input } from '../components/ui/Input'
 import { EmptyState } from '../components/ui/EmptyState'
-import { campusLocations } from '../data/campusData'
+import { fetchCampusLocations } from '../services/api'
 import type { CampusLocation } from '../types'
+import { LoadingState } from '../components/ui/LoadingState'
 
 export function CampusPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const query = searchParams.get('query') ?? ''
-  const [selectedLocation, setSelectedLocation] = useState<CampusLocation>(campusLocations[0])
+  const [locations, setLocations] = useState<CampusLocation[]>([])
+  const [selectedLocation, setSelectedLocation] = useState<CampusLocation | null>(null)
+  const [loadError, setLoadError] = useState('')
+
+  useEffect(() => {
+    let isMounted = true
+
+    fetchCampusLocations()
+      .then((nextLocations) => {
+        if (!isMounted) return
+        setLocations(nextLocations)
+        setSelectedLocation(nextLocations[0] ?? null)
+      })
+      .catch(() => {
+        if (isMounted) setLoadError('Campus information could not be loaded.')
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const filteredLocations = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase()
-    if (!normalizedQuery) return campusLocations
+    if (!normalizedQuery) return locations
 
-    return campusLocations.filter((location) =>
+    return locations.filter((location) =>
       [location.name, location.category, location.description, location.badge, location.area].some((value) =>
         value.toLowerCase().includes(normalizedQuery),
       ),
     )
-  }, [query])
+  }, [locations, query])
 
   const updateQuery = (nextQuery: string) => {
     setSearchParams((currentParams) => {
@@ -76,12 +98,14 @@ export function CampusPage() {
                   </button>
                 ) : null}
               </div>
+              {loadError ? <p className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{loadError}</p> : null}
+              {!loadError && locations.length === 0 ? <LoadingState /> : null}
               {filteredLocations.length > 0 ? (
                 filteredLocations.map((location) => (
                   <LocationCard
                     key={location.id}
                     location={location}
-                    isSelected={selectedLocation.id === location.id}
+                    isSelected={selectedLocation?.id === location.id}
                     onViewDetails={setSelectedLocation}
                   />
                 ))
@@ -93,31 +117,33 @@ export function CampusPage() {
             <div className="overflow-hidden rounded-[28px] border border-[#edf0f2] bg-white p-5 shadow-[0_18px_50px_rgba(11,31,58,0.05)]">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-[#0B1F3A]">Campus map</h2>
-                <span className="text-xs text-slate-500">{campusLocations.length} locations</span>
+                <span className="text-xs text-slate-500">{locations.length} locations</span>
               </div>
 
-              <div className="relative h-[460px] overflow-hidden rounded-2xl border border-[#edf0f2]">
-                <CampusMap
-                  locations={campusLocations}
-                  selectedLocation={selectedLocation}
-                  onSelectLocation={setSelectedLocation}
-                />
+              {selectedLocation ? (
+                <div className="relative h-[460px] overflow-hidden rounded-2xl border border-[#edf0f2]">
+                  <CampusMap
+                    locations={locations}
+                    selectedLocation={selectedLocation}
+                    onSelectLocation={setSelectedLocation}
+                  />
 
-                <div className="absolute bottom-6 left-6 right-6 rounded-2xl border border-[#edf0f2] bg-white/90 p-4 backdrop-blur-sm">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">Selected location</p>
-                  <h3 className="mt-2 font-semibold text-[#0B1F3A]">{selectedLocation.name}</h3>
-                  <p className="mt-1 text-sm text-slate-600">{selectedLocation.area}</p>
-                  <Link
-                    to={`/chat?question=${encodeURIComponent(`Tell me about ${selectedLocation.name}`)}`}
-                    className="action-link mt-3 text-sm"
-                  >
-                    Ask assistant
-                    <ArrowRight size={14} />
-                  </Link>
+                  <div className="absolute bottom-6 left-6 right-6 rounded-2xl border border-[#edf0f2] bg-white/90 p-4 backdrop-blur-sm">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">Selected location</p>
+                    <h3 className="mt-2 font-semibold text-[#0B1F3A]">{selectedLocation.name}</h3>
+                    <p className="mt-1 text-sm text-slate-600">{selectedLocation.area}</p>
+                    <Link
+                      to={`/chat?question=${encodeURIComponent(`Tell me about ${selectedLocation.name}`)}`}
+                      className="action-link mt-3 text-sm"
+                    >
+                      Ask assistant
+                      <ArrowRight size={14} />
+                    </Link>
+                  </div>
                 </div>
-              </div>
+              ) : null}
 
-              <MapLegend locations={campusLocations} onSelectLocation={setSelectedLocation} />
+              {locations.length > 0 ? <MapLegend locations={locations} onSelectLocation={setSelectedLocation} /> : null}
             </div>
           </div>
         </div>

@@ -1,4 +1,15 @@
+import type { AcademicSection, AnnouncementItem, CampusLocation } from '../types'
+
 const API_BASE_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:8000').replace(/\/$/, '')
+
+const mapPositions: Record<string, { left: string; top: string }> = {
+  library: { left: '18%', top: '18%' },
+  'computer-science': { left: '65%', top: '28%' },
+  'student-center': { left: '52%', top: '42%' },
+  registry: { left: '25%', top: '62%' },
+  ict: { left: '74%', top: '64%' },
+  engineering: { left: '42%', top: '76%' },
+}
 
 export interface ChatSource {
   source: string
@@ -33,20 +44,55 @@ export async function sendChatMessage(
 
 export async function fetchHealth() {
   const response = await fetch(`${API_BASE_URL}/api/health`)
+  if (!response.ok) throw new Error('Health request failed')
   return response.json()
 }
 
-export async function fetchCampusLocations() {
+interface CampusLocationApiResponse {
+  id: string
+  name: string
+  category: string
+  description: string
+  badge: string
+  area: string
+  location_type: CampusLocation['locationType']
+  coordinates: { lat: number; lng: number }
+  building_id?: string
+  external_url?: string
+}
+
+export async function fetchCampusLocations(): Promise<CampusLocation[]> {
   const response = await fetch(`${API_BASE_URL}/api/campus`)
-  return response.json()
+  if (!response.ok) throw new Error('Campus locations request failed')
+
+  const locations = await response.json() as CampusLocationApiResponse[]
+  return locations.map((location) => ({
+    id: location.id,
+    name: location.name,
+    category: location.category,
+    description: location.description,
+    badge: location.badge,
+    area: location.area,
+    locationType: location.location_type,
+    mapPosition: mapPositions[location.id] ?? { left: '50%', top: '50%' },
+    coordinates: location.coordinates,
+    buildingId: location.building_id,
+    externalUrl: location.external_url,
+  }))
 }
 
-export async function fetchAnnouncements() {
+export async function fetchAnnouncements(): Promise<AnnouncementItem[]> {
   const response = await fetch(`${API_BASE_URL}/api/announcements`)
-  return response.json()
+  if (!response.ok) throw new Error('Announcements request failed')
+  return response.json() as Promise<AnnouncementItem[]>
 }
 
-export async function fetchAcademics() {
+export async function fetchAcademics(): Promise<AcademicSection[]> {
   const response = await fetch(`${API_BASE_URL}/api/academics`)
-  return response.json()
+  if (!response.ok) throw new Error('Academics request failed')
+  const sections = await response.json() as Array<Omit<AcademicSection, 'items'> & { items: string[] }>
+  return sections.map((section) => ({
+    ...section,
+    items: section.items.map((label) => ({ label })),
+  }))
 }

@@ -21,7 +21,14 @@ class Settings(BaseSettings):
     GROK_MODEL: str = 'llama-3.3-70b-versatile'
     GROK_BASE_URL: str = 'https://api.groq.com/openai/v1'
 
-    CORS_ORIGINS: list[str] = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000', 'http://127.0.0.1:3000']
+    CORS_ORIGINS: list[str] = [
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+        'http://localhost:5174',
+        'http://127.0.0.1:5174',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+    ]
     # Brute-force / rate-limit (slowapi format: "N/period")
     RATE_LIMIT: str = '10/minute'
 

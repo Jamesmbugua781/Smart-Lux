@@ -1,18 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
 import { PageHeader } from '../components/ui/PageHeader'
 import { AnnouncementCard } from '../components/announcements/AnnouncementCard'
-import { announcementItems } from '../data/announcements'
+import { fetchAnnouncements } from '../services/api'
+import type { AnnouncementItem } from '../types'
+import { LoadingState } from '../components/ui/LoadingState'
 
 export function AnnouncementsPage() {
   const [expandedAnnouncementId, setExpandedAnnouncementId] = useState<string | null>(null)
+  const [announcementItems, setAnnouncementItems] = useState<AnnouncementItem[]>([])
+  const [loadError, setLoadError] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
   const categories = ['All', 'Academic', 'Library', 'ICT', 'Student Support']
 
   const toggleAnnouncement = (id: string) => {
     setExpandedAnnouncementId((currentId) => (currentId === id ? null : id))
   }
+
+  useEffect(() => {
+    fetchAnnouncements()
+      .then(setAnnouncementItems)
+      .catch(() => setLoadError('Announcements could not be loaded.'))
+  }, [])
 
   const filteredAnnouncements = selectedCategory === 'All'
     ? announcementItems
@@ -28,6 +38,9 @@ export function AnnouncementsPage() {
             title="Latest announcements"
             subtitle="Stay informed with the latest updates from the university and student services."
           />
+
+          {loadError ? <p className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{loadError}</p> : null}
+          {!loadError && announcementItems.length === 0 ? <LoadingState /> : null}
 
           <div className="mb-6 flex flex-wrap gap-2" aria-label="Filter announcements by category">
             {categories.map((category) => (
