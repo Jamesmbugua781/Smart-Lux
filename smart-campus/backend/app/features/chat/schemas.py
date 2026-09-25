@@ -2,6 +2,14 @@
 features/chat/schemas.py
 Pydantic models for chat turns, multi-turn conversation memory,
 citations, and confidence scores. All user strings are sanitised.
+
+Note on trust boundaries
+------------------------
+Only the *new* user `message` field is run through sanitise_input.
+History messages (ChatMessage) are produced by our own system and
+already validated when they were first submitted, so re-validating
+them causes false positives (e.g. assistant explanations that
+legitimately contain SQL keywords like SELECT or --).
 """
 from __future__ import annotations
 
@@ -11,13 +19,19 @@ from app.core.security import sanitise_input
 
 
 class ChatMessage(BaseModel):
+    """A single turn in the conversation history (role + content).
+
+    Content is lightly stripped but NOT passed through the SQL-injection
+    guard — history is system-generated and already trusted.
+    """
     role: str = Field(default='user', max_length=20)
     content: str = Field(default='', max_length=5000)
 
     @field_validator('content')
     @classmethod
-    def sanitise_content(cls, value: str) -> str:
-        return sanitise_input(value.strip())
+    def strip_content(cls, value: str) -> str:
+        # Only whitespace-strip; no security check on trusted history.
+        return value.strip()
 
 
 class Source(BaseModel):

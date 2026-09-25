@@ -52,8 +52,20 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    logger.warning('Validation error on %s: %s', request.url.path, exc.errors())
-    return JSONResponse(status_code=422, content={'detail': exc.errors()})
+    # Sanitise error dicts before JSON-serialisation.
+    # Custom Pydantic validators that raise ValueError store the raw exception
+    # object in err["ctx"]["error"], which is NOT JSON-serialisable and would
+    # cause a secondary TypeError crash.  Convert it to a plain string here.
+    sanitised_errors = []
+    for err in exc.errors():
+        err = dict(err)
+        ctx = err.get('ctx')
+        if isinstance(ctx, dict) and isinstance(ctx.get('error'), Exception):
+            err['ctx'] = {'error': str(ctx['error'])}
+        sanitised_errors.append(err)
+
+    logger.warning('Validation error on %s: %s', request.url.path, sanitised_errors)
+    return JSONResponse(status_code=422, content={'detail': sanitised_errors})
 
 # ---------------------------------------------------------------------------
 # Middleware (order matters: outermost runs first on request, last on response)

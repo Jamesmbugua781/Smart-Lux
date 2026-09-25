@@ -43,9 +43,19 @@ body {
 
 #root {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Each page wrapper (min-h-screen div) should also be a flex column */
+#root > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 main {
+  flex: 1;
   padding-bottom: 6.5rem;
 }
 
