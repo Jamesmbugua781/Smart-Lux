@@ -64,9 +64,8 @@ class RetrievalService:
             close_session = True
 
         try:
-            # Sync General Campus Knowledge from JSON
-            if self.knowledge_path.exists():
-                db.query(CampusKnowledge).delete()
+            # Sync General Campus Knowledge from JSON if empty
+            if db.query(CampusKnowledge).first() is None and self.knowledge_path.exists():
                 logger.info('Syncing campus_knowledge table from %s...', self.knowledge_path)
                 with self.knowledge_path.open(encoding='utf-8') as f:
                     entries = json.load(f)
@@ -86,9 +85,8 @@ class RetrievalService:
                     )
                     db.add(db_entry)
 
-            # Sync School Knowledge (SCIT) from JSON
-            if self.scit_knowledge_path.exists():
-                db.query(SchoolKnowledge).delete()
+            # Sync School Knowledge (SCIT) from JSON if empty
+            if db.query(SchoolKnowledge).first() is None and self.scit_knowledge_path.exists():
                 logger.info('Syncing school_knowledge (SCIT) table from %s...', self.scit_knowledge_path)
                 with self.scit_knowledge_path.open(encoding='utf-8') as f:
                     scit_entries = json.load(f)

@@ -30,7 +30,7 @@ class Settings(BaseSettings):
         'http://127.0.0.1:3000',
     ]
     # Brute-force / rate-limit (slowapi format: "N/period")
-    RATE_LIMIT: str = '10/minute'
+    RATE_LIMIT: str = '100/minute'
 
     @property
     def effective_gemini_api_key(self) -> str:
