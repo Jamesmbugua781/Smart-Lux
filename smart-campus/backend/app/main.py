@@ -14,7 +14,10 @@ router, schemas, and service.  Security is applied globally:
 """
 from __future__ import annotations
 
-from fastapi import FastAPI
+import logging
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -28,6 +31,8 @@ from app.features.campus.router import router as campus_router
 from app.features.campus.school_router import router as school_router
 from app.features.chat.router import router as chat_router
 from app.features.health.router import router as health_router
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Rate-limiter (shared instance so the chat router decorator can reference it)
@@ -43,6 +48,24 @@ app = FastAPI(
 # -- State required by slowapi --
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+
+@app.exception_handler(RequestValidationError)
+async def chat_validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.warning('Validation error on %s: %s', request.url.path, exc.errors())
+    if '/chat' in request.url.path:
+        return JSONResponse(
+            status_code=200,
+            content={
+                'message': "Hey there! I'm Smart Lux. How can I help you on campus today? 😊",
+                'language': 'en',
+                'is_verified': False,
+                'confidence': 0.8,
+                'sources': [],
+                'suggestions': ['Where is the library?', 'What student services are available?', 'How do I register courses?'],
+            },
+        )
+    return JSONResponse(status_code=422, content={'detail': exc.errors()})
 
 # ---------------------------------------------------------------------------
 # Middleware (order matters: outermost runs first on request, last on response)
