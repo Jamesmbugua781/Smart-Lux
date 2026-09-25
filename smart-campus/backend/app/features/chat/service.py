@@ -20,7 +20,10 @@ class ChatService:
         self.ai_service = ai_service or AIService()
 
     async def generate_response(self, request: ChatRequest) -> ChatResponse:
-        context = self.retrieval_service.search(request.message)
+        try:
+            context = self.retrieval_service.search(request.message)
+        except Exception:
+            context = []
 
         # Convert history schema to dictionary list for AIService
         history_dicts = [
@@ -28,12 +31,19 @@ class ChatService:
         ]
 
         # Call AI Provider with RAG Context (if any) + Multi-Turn History
-        result = await self.ai_service.generate_answer(
-            question=request.message,
-            language=request.language,
-            context=context,
-            history=history_dicts,
-        )
+        try:
+            result = await self.ai_service.generate_answer(
+                question=request.message,
+                language=request.language,
+                context=context,
+                history=history_dicts,
+            )
+        except Exception:
+            if context:
+                top = context[0]
+                result = f"Here is what I found on campus for your query: **{top.get('name')}** - {top.get('description')} (Location: {top.get('location', 'N/A')})."
+            else:
+                result = "Hey there! I'm Smart Lux. Feel free to ask me about DeKUT courses, VC/Dean offices, past papers, rules, or campus locations!"
 
         # -------------------------------------------------------------------
         # Citation & Source Attribution
