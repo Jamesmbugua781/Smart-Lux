@@ -175,7 +175,7 @@ class RetrievalService:
         terms = {
             term
             for term in re.findall(r'[\w]+', question.lower())
-            if len(term) > 2 and term not in STOPWORDS
+            if len(term) >= 2 and term not in STOPWORDS
         }
 
         if not terms:

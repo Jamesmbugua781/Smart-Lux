@@ -143,7 +143,7 @@ class AIService:
             'temperature': 0.7,
         }
 
-        async with httpx.AsyncClient(timeout=30.0) as http_client:
+        async with httpx.AsyncClient(timeout=8.0) as http_client:
             response = await http_client.post(
                 f'{settings.GROK_BASE_URL}/chat/completions',
                 headers=headers,

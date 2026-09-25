@@ -51,20 +51,8 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 @app.exception_handler(RequestValidationError)
-async def chat_validation_exception_handler(request: Request, exc: RequestValidationError):
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
     logger.warning('Validation error on %s: %s', request.url.path, exc.errors())
-    if '/chat' in request.url.path:
-        return JSONResponse(
-            status_code=200,
-            content={
-                'message': "Hey there! I'm Smart Lux. How can I help you on campus today? 😊",
-                'language': 'en',
-                'is_verified': False,
-                'confidence': 0.8,
-                'sources': [],
-                'suggestions': ['Where is the library?', 'What student services are available?', 'How do I register courses?'],
-            },
-        )
     return JSONResponse(status_code=422, content={'detail': exc.errors()})
 
 # ---------------------------------------------------------------------------
