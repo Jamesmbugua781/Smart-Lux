@@ -1,4 +1,5 @@
 import { MessageSquareText, Plus } from 'lucide-react'
+import { Brand } from './Brand'
 
 const recentConversations = [
   { label: 'Library information', prompt: 'Where is the library and what services are available?' },
@@ -15,10 +16,7 @@ export function Sidebar({ onNewConversation, onSelectConversation }: SidebarProp
   return (
     <aside className="hidden w-[280px] shrink-0 border-r border-[#edf0f2] bg-[#f7faf8] lg:flex lg:flex-col">
       <div className="flex items-center justify-between border-b border-[#edf0f2] px-5 py-5">
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#126B3A]">Smart Campus</p>
-          <h2 className="mt-1 text-lg font-semibold text-[#0B1F3A]">SMART CAMPUS</h2>
-        </div>
+        <Brand />
       </div>
 
       <div className="px-4 py-4">
@@ -42,7 +40,7 @@ export function Sidebar({ onNewConversation, onSelectConversation }: SidebarProp
               onClick={() => onSelectConversation(item.prompt)}
               className="flex w-full items-center gap-3 rounded-xl border border-transparent bg-white px-3 py-3 text-left text-sm text-[#0B1F3A] shadow-sm transition hover:border-[#dfe7ee] hover:bg-[#f5f7f8]"
             >
-              <MessageSquareText size={15} className="text-[#126B3A]" />
+              <MessageSquareText size={15} className="text-[var(--color-primary)]" />
               <span>{item.label}</span>
             </button>
           ))}

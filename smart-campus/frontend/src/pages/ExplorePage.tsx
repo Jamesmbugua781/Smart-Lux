@@ -1,9 +1,14 @@
+import { useNavigate } from 'react-router-dom'
 import { Navbar } from '../components/layout/Navbar'
+import { Footer } from '../components/layout/Footer'
+import { SuggestionChip } from '../components/chat/SuggestionChip'
 import { PageHeader } from '../components/ui/PageHeader'
 import { ServiceCard } from '../components/campus/ServiceCard'
-import { serviceCategories } from '../data/services'
+import { popularQuestions, serviceCategories } from '../data/campusData'
 
 export function ExplorePage() {
+  const navigate = useNavigate()
+
   return (
     <div className="min-h-screen bg-[#F8F8F5]">
       <Navbar />
@@ -20,8 +25,15 @@ export function ExplorePage() {
               <ServiceCard key={category.id} category={category} />
             ))}
           </div>
+          <div className="mt-10">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Popular questions</h2>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {popularQuestions.map((question) => <SuggestionChip key={question} label={question} onClick={(value) => navigate(`/chat?question=${encodeURIComponent(value)}`)} />)}
+            </div>
+          </div>
         </div>
       </main>
+      <Footer />
     </div>
   )
 }

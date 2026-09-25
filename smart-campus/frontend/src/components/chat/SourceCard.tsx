@@ -10,7 +10,7 @@ export function SourceCard({ title, type = 'Source', source }: SourceCardProps) 
   return (
     <div className="rounded-2xl border border-[#edf0f2] bg-[#f9fafb] p-4">
       <div className="flex items-center justify-between gap-3">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#126B3A]">{type}</span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">{type}</span>
         <ArrowUpRight size={14} className="text-[#0B1F3A]" />
       </div>
       <p className="mt-2 text-sm font-medium text-[#0B1F3A]">{title}</p>

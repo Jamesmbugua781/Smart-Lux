@@ -11,7 +11,7 @@ export function AnnouncementCard({ item, isExpanded, onToggle }: AnnouncementCar
   return (
     <article className="rounded-2xl border border-[#edf0f2] bg-white p-5 shadow-[0_12px_30px_rgba(11,31,58,0.04)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(11,31,58,0.06)]">
       <div className="flex items-center justify-between gap-3">
-        <span className="rounded-full bg-[#edf7f0] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#126B3A]">
+        <span className="rounded-full bg-[var(--color-primary-soft)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--color-primary)]">
           {item.category}
         </span>
         <span className="text-sm text-slate-500">{item.date}</span>
@@ -26,7 +26,7 @@ export function AnnouncementCard({ item, isExpanded, onToggle }: AnnouncementCar
       <button
         type="button"
         onClick={() => onToggle(item.id)}
-        className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[#126B3A]"
+        className="action-link mt-4 text-sm"
         aria-expanded={isExpanded}
       >
         {isExpanded ? 'Show less' : 'Read more'}

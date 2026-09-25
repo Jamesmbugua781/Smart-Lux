@@ -35,7 +35,7 @@ export function ServiceCard({ category }: ServiceCardProps) {
   return (
     <Link to={target} className="group block rounded-2xl border border-[#edf0f2] bg-white p-5 shadow-[0_12px_30px_rgba(11,31,58,0.03)] transition duration-200 hover:-translate-y-1 hover:border-[#dfe7ee] hover:shadow-[0_18px_40px_rgba(11,31,58,0.06)]" aria-label={`Open ${category.title}`}>
       <div className="flex items-center justify-between">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#edf7f0] text-[#126B3A]">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-primary-soft)] text-[var(--color-primary)]">
           <Icon size={18} />
         </div>
         <span className="text-[#0B1F3A] transition group-hover:translate-x-1">

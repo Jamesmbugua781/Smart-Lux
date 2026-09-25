@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Globe, MessageSquareText, RotateCcw } from 'lucide-react'
+import { Globe } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { Sidebar } from '../components/layout/Sidebar'
+import { Footer } from '../components/layout/Footer'
 import { ChatMessage } from '../components/chat/ChatMessage'
 import { ChatInput } from '../components/chat/ChatInput'
+import { SuggestionChip } from '../components/chat/SuggestionChip'
 import { SourceCard } from '../components/chat/SourceCard'
 import { sendChatMessage } from '../services/api'
 import type { ChatMessageData } from '../types'
+import { popularQuestions } from '../data/campusData'
 
 export function ChatPage() {
   const location = useLocation()
@@ -71,7 +74,7 @@ export function ChatPage() {
           <header className="border-b border-[#edf0f2] bg-white/95 px-4 py-4 backdrop-blur-sm sm:px-6">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#126B3A]">Campus Assistant</p>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--color-primary)]">SMART LUX</p>
                 <h1 className="mt-1 text-xl font-semibold text-[#0B1F3A]">Campus Assistant</h1>
               </div>
 
@@ -84,18 +87,15 @@ export function ChatPage() {
 
           <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl">
-              <div className="mb-6 rounded-2xl border border-[#edf0f2] bg-white p-4 shadow-sm">
-                <div className="flex items-center justify-between gap-2 text-sm text-[#126B3A]">
-                  <div className="flex items-center gap-2">
-                  <MessageSquareText size={16} />
-                    <span className="font-medium">Campus conversation</span>
+              {messages.length === 0 ? (
+                <div className="mb-8">
+                  <p className="text-2xl font-semibold tracking-tight text-[#0B1F3A]">Hi, how can I help on campus today?</p>
+                  <p className="mt-2 text-sm text-slate-500">Try one of these questions to get started.</p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {popularQuestions.map((question) => <SuggestionChip key={question} label={question} onClick={(value) => void submitMessage(value)} />)}
                   </div>
-                  <button type="button" onClick={clearConversation} className="inline-flex items-center gap-2 text-xs font-medium text-slate-500 hover:text-[#126B3A]" aria-label="Start a new conversation">
-                    <RotateCcw size={14} />
-                    New conversation
-                  </button>
                 </div>
-              </div>
+              ) : null}
 
               {messages.map((message) => (
                 <ChatMessage key={message.id} message={message} />
@@ -120,7 +120,7 @@ export function ChatPage() {
                 <div className="mb-5">
                   <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Try asking</p>
                   <div className="flex flex-wrap gap-2">
-                    {suggestions.map((suggestion) => <button key={suggestion} type="button" onClick={() => submitMessage(suggestion)} className="rounded-full border border-[#cfe7d9] bg-white px-3 py-2 text-xs text-[#126B3A] hover:bg-[#f0f8f3]">{suggestion}</button>)}
+                    {suggestions.map((suggestion) => <SuggestionChip key={suggestion} label={suggestion} onClick={(value) => void submitMessage(value)} />)}
                   </div>
                 </div>
               ) : null}
@@ -132,6 +132,7 @@ export function ChatPage() {
               <ChatInput placeholder="Ask Smart Campus..." value={input} onChange={setInput} onSubmit={() => submitMessage()} disabled={isLoading} />
             </div>
           </div>
+          <Footer />
         </main>
       </div>
     </div>

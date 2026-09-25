@@ -13,7 +13,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
       <div
         className={`max-w-[82%] rounded-2xl border px-4 py-3 shadow-sm ${
           isUser
-            ? 'border-[#cfe7d9] bg-[#126B3A] text-white'
+            ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white'
             : 'border-[#edf0f2] bg-white text-[#0B1F3A]'
         }`}
       >
@@ -42,8 +42,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  <MapPin size={14} className={isUser ? 'text-[#F3D98A]' : 'text-[#126B3A]'} />
-                  <span className="text-xs font-medium uppercase tracking-[0.12em] text-[#126B3A]">
+                  <MapPin size={14} className="text-[var(--color-primary)]" />
+                  <span className="text-xs font-medium uppercase tracking-[0.12em] text-[var(--color-primary)]">
                     Source
                   </span>
                 </div>

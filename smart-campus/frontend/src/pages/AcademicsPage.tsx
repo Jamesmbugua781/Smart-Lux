@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Navbar } from '../components/layout/Navbar'
+import { Footer } from '../components/layout/Footer'
 import { PageHeader } from '../components/ui/PageHeader'
 import { academicSections } from '../data/academics'
 
@@ -30,19 +31,19 @@ export function AcademicsPage() {
 
               return (
                 <article key={section.id} className="rounded-2xl border border-[#edf0f2] bg-white p-5 shadow-[0_12px_30px_rgba(11,31,58,0.03)]">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#126B3A]">Academic</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">Academic</p>
                   <h2 className="mt-3 text-xl font-semibold text-[#0B1F3A]">{section.title}</h2>
                   <p className="mt-2 text-sm text-slate-600">{section.subtitle}</p>
                   <ul className="mt-4 space-y-2">
                     {section.items.map((item) => (
                       <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
-                        <span className="mt-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[#C9A227]" />
+                        <span className="mt-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-primary)]" />
                         <span>{item}</span>
                       </li>
                     ))}
                   </ul>
                   {target ? (
-                    <Link to={target.to} className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-[#126B3A]">
+                    <Link to={target.to} className="action-link mt-5 text-sm">
                       {target.label}
                       <ArrowRight size={14} />
                     </Link>
@@ -53,6 +54,7 @@ export function AcademicsPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   )
 }

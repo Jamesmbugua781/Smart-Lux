@@ -5,7 +5,7 @@ export function LoadingState() {
         {Array.from({ length: 3 }).map((_, index) => (
           <span
             key={index}
-            className="h-2.5 w-2.5 animate-bounce rounded-full bg-[#126B3A]"
+            className="h-2.5 w-2.5 animate-bounce rounded-full bg-[var(--color-primary)]"
             style={{ animationDelay: `${index * 120}ms` }}
           />
         ))}

@@ -19,6 +19,8 @@ export interface CampusLocation {
   description: string
   badge: string
   area: string
+  locationType: 'library' | 'school' | 'support' | 'registry' | 'ict'
+  mapPosition: { left: string; top: string }
 }
 
 export interface ServiceCategory {
