@@ -6,6 +6,8 @@ import { CampusPage } from './pages/CampusPage'
 import { MapPage } from './pages/MapPage'
 import { AnnouncementsPage } from './pages/AnnouncementsPage'
 import { AcademicsPage } from './pages/AcademicsPage'
+import { DocumentationPage } from './pages/DocumentationPage'
+import { TermsPage } from './pages/TermsPage'
 import { Login } from './pages/Login'
 import { Profile } from './pages/Profile'
 import { NotFound } from './pages/NotFound'
@@ -22,6 +24,8 @@ function App() {
         <Route path="/map" element={<MapPage />} />
         <Route path="/announcements" element={<AnnouncementsPage />} />
         <Route path="/academics" element={<AcademicsPage />} />
+        <Route path="/docs" element={<DocumentationPage />} />
+        <Route path="/terms" element={<TermsPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />

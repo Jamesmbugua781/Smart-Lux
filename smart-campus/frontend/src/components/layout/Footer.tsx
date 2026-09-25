@@ -11,7 +11,9 @@ export function Footer() {
           <p className="mt-1">Intelligent campus guidance, all in one place.</p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-          <div>
+          <div className="flex flex-wrap items-center gap-4">
+            <Link className="action-link" to="/docs">Documentation</Link>
+            <Link className="action-link" to="/terms">Terms of Use</Link>
             <Link className="action-link" to="/campus?query=ict">Contact ICT Help Desk</Link>
           </div>
           <p>© {currentYear} SMART LUX. All rights reserved.</p>
