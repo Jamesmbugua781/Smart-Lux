@@ -14,6 +14,14 @@ class ChatMessage(BaseModel):
     role: str = Field(default='user', max_length=20)
     content: str = Field(default='', max_length=5000)
 
+    @field_validator('role')
+    @classmethod
+    def normalize_role(cls, value: str) -> str:
+        val = (value or 'user').lower().strip()
+        if val in ('bot', 'assistant', 'model', 'ai', 'system'):
+            return 'assistant'
+        return 'user'
+
     @field_validator('content')
     @classmethod
     def sanitise_content(cls, value: str) -> str:
