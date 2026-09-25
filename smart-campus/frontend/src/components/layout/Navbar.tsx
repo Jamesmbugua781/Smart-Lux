@@ -1,17 +1,16 @@
 import {
   Bell,
   Compass,
-  Globe,
   GraduationCap,
   Map as MapIcon,
   MapPinned,
-  MessageSquareText,
   Sparkles,
   UserRound,
 } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
-import { useState } from 'react'
+import { useAuth } from '../auth/AuthContext'
 import { Brand } from './Brand'
+import { LanguageToggle } from '../ui/LanguageToggle'
 
 const navItems = [
   { to: '/explore', label: 'Explore' },
@@ -36,12 +35,9 @@ const mobileNavItems: Array<{
 ]
 
 export function Navbar() {
-  const [language, setLanguage] = useState<'EN' | 'SW'>('EN')
-  const [isProfileOpen, setIsProfileOpen] = useState(false)
   const location = useLocation()
-  const closeMenus = () => {
-    setIsProfileOpen(false)
-  }
+  const { user } = useAuth()
+  const profilePath = user ? '/profile' : '/login'
 
   return (
     <header className="sticky top-0 z-30 border-b border-[#e7edf3] bg-[#f8f8f5]/95 backdrop-blur-sm">
@@ -81,47 +77,16 @@ export function Navbar() {
             Open Assistant
           </Link>
 
-          <button
-            type="button"
-            onClick={() => setLanguage((current) => (current === 'EN' ? 'SW' : 'EN'))}
-            className="inline-flex items-center gap-2 rounded-full border border-[#dfe7ee] bg-white px-3 py-2 text-xs font-medium text-[#0B1F33] transition hover:bg-[var(--color-primary-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2"
-            aria-label={`Switch language. Current language is ${language}`}
-          >
-            <Globe size={14} />
-            {language}
-          </button>
+          <LanguageToggle />
 
-          <button
-            type="button"
-            onClick={() => setIsProfileOpen((current) => !current)}
+          <Link
+            to={profilePath}
             className="inline-flex items-center gap-2 rounded-full border border-[#dfe7ee] bg-white px-3 py-2 text-sm font-medium text-[#0B1F33] transition hover:bg-[var(--color-primary-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2"
-            aria-label="Open student profile"
-            aria-expanded={isProfileOpen}
+            aria-label={user ? 'Open profile' : 'Sign in'}
           >
-            <UserRound size={16} />
-            <span className="hidden sm:inline">Profile</span>
-          </button>
-
-          {isProfileOpen ? (
-            <div className="absolute right-0 top-12 w-56 rounded-2xl border border-[#edf1f5] bg-white p-3 shadow-[0_18px_45px_rgba(11,31,58,0.12)]">
-              <p className="px-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Student tools</p>
-              <Link
-                to="/chat"
-                onClick={closeMenus}
-                className="mt-2 flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-[#0B1F33] transition hover:bg-[var(--color-primary-soft)]"
-              >
-                <MessageSquareText size={15} />
-                Open assistant
-              </Link>
-              <Link
-                to="/academics"
-                onClick={closeMenus}
-                className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-[#0B1F33] transition hover:bg-[var(--color-primary-soft)]"
-              >
-                Academic info
-              </Link>
-            </div>
-          ) : null}
+            {user ? <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-primary-soft)] text-[10px] font-bold text-[var(--color-primary)]">{user.initials}</span> : <UserRound size={16} />}
+            <span className="hidden sm:inline">{user ? user.initials : 'Login'}</span>
+          </Link>
         </div>
       </div>
 
@@ -135,16 +100,15 @@ export function Navbar() {
 
             if (item.action === 'profile') {
               return (
-                <button
+                <Link
                   key={item.label}
-                  type="button"
-                  onClick={() => setIsProfileOpen((current) => !current)}
+                  to={profilePath}
                   className="flex flex-col items-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-medium text-[#0B1F33]/70 transition hover:bg-[var(--color-primary-soft)] hover:text-[var(--color-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2"
-                  aria-label="Open student profile"
+                  aria-label={user ? 'Open profile' : 'Sign in'}
                 >
                   <Icon size={18} />
-                  <span>{item.label}</span>
-                </button>
+                  <span>{user ? user.initials : item.label}</span>
+                </Link>
               )
             }
 

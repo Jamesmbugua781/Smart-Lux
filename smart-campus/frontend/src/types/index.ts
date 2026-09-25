@@ -23,6 +23,7 @@ export interface CampusLocation {
   area: string
   locationType: 'library' | 'school' | 'support' | 'registry' | 'ict'
   mapPosition: { left: string; top: string }
+  externalUrl?: string
 }
 
 export interface ServiceCategory {
@@ -44,5 +45,10 @@ export interface AcademicSection {
   id: string
   title: string
   subtitle: string
-  items: string[]
+  items: AcademicItem[]
+}
+
+export interface AcademicItem {
+  label: string
+  externalUrl?: string
 }

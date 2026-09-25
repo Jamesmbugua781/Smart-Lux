@@ -20,12 +20,12 @@ export const serviceCategories: ServiceCategory[] = [
 ]
 
 export const campusLocations: CampusLocation[] = [
-  { id: 'library', name: 'Central Library', category: 'Academic Hub', description: 'Campus library for research support and study access.', badge: 'Library', area: 'North Quadrant', locationType: 'library', mapPosition: { left: '18%', top: '18%' } },
-  { id: 'computer-science', name: 'School of Computer Science', category: 'Academic Department', description: 'Department location for computing and digital studies.', badge: 'School', area: 'Innovation District', locationType: 'school', mapPosition: { left: '65%', top: '28%' } },
-  { id: 'student-center', name: 'Student Services Center', category: 'Support Office', description: 'Student support services and general assistance point.', badge: 'Support', area: 'Main Campus', locationType: 'support', mapPosition: { left: '52%', top: '42%' } },
-  { id: 'registry', name: 'Registry Office', category: 'Administration', description: 'Office for records, admission, and student administration.', badge: 'Registry', area: 'Administration Block', locationType: 'registry', mapPosition: { left: '25%', top: '62%' } },
-  { id: 'ict', name: 'ICT Help Desk', category: 'Technology', description: 'Digital access assistance and campus connectivity support.', badge: 'ICT', area: 'Tech Plaza', locationType: 'ict', mapPosition: { left: '74%', top: '64%' } },
-  { id: 'engineering', name: 'Engineering Faculty', category: 'Academic Department', description: 'Faculty building for engineering and applied sciences.', badge: 'Faculty', area: 'Science Campus', locationType: 'school', mapPosition: { left: '42%', top: '76%' } },
+  { id: 'library', name: 'Central Library', category: 'Academic Hub', description: 'Campus library for research support and study access.', badge: 'Library', area: 'North Quadrant', locationType: 'library', mapPosition: { left: '18%', top: '18%' }, externalUrl: 'https://www.dkut.ac.ke/library/#gsc.tab=0' },
+  { id: 'computer-science', name: 'School of Computer Science', category: 'Academic Department', description: 'Department location for computing and digital studies.', badge: 'School', area: 'Innovation District', locationType: 'school', mapPosition: { left: '65%', top: '28%' }, externalUrl: 'https://csit.dkut.ac.ke/' },
+  { id: 'student-center', name: 'Student Services Center', category: 'Support Office', description: 'Student support services and general assistance point.', badge: 'Support', area: 'Main Campus', locationType: 'support', mapPosition: { left: '52%', top: '42%' }, externalUrl: 'https://studentwelfare.dkut.ac.ke/' },
+  { id: 'registry', name: 'Registry Office', category: 'Administration', description: 'Office for records, admission, and student administration.', badge: 'Registry', area: 'Administration Block', locationType: 'registry', mapPosition: { left: '25%', top: '62%' }, externalUrl: 'https://www.dkut.ac.ke/index.php/admissions-and-records' },
+  { id: 'ict', name: 'ICT Help Desk', category: 'Technology', description: 'Digital access assistance and campus connectivity support.', badge: 'ICT', area: 'Tech Plaza', locationType: 'ict', mapPosition: { left: '74%', top: '64%' }, externalUrl: 'https://helpdesk.dkut.ac.ke/' },
+  { id: 'engineering', name: 'Engineering Faculty', category: 'Academic Department', description: 'Faculty building for engineering and applied sciences.', badge: 'Faculty', area: 'Science Campus', locationType: 'school', mapPosition: { left: '42%', top: '76%' }, externalUrl: 'https://soe.dkut.ac.ke/' },
 ]
 
 export const announcementItems: AnnouncementItem[] = [
@@ -40,10 +40,10 @@ export const announcementItems: AnnouncementItem[] = [
 ]
 
 export const academicSections: AcademicSection[] = [
-  { id: 'calendar', title: 'Academic calendar', subtitle: 'Key dates for planning the academic year.', items: ['Semester start: 14 January', 'Mid-semester break: 24 March', 'Examination period: 15 May', 'Results release: 25 May'] },
-  { id: 'schools', title: 'Schools & departments', subtitle: 'Faculty and school structure for campus planning.', items: ['School of Computer Science', 'School of Business and Economics', 'Faculty of Engineering', 'School of Health Sciences'] },
-  { id: 'courses', title: 'Courses', subtitle: 'Common academic support workflows.', items: ['Course registration guidance', 'Curriculum selection', 'Timetable planning', 'Academic advising'] },
-  { id: 'examinations', title: 'Examinations', subtitle: 'Examination and assessment guidance.', items: ['Exam timetable', 'Revision resources', 'Clearance requirements', 'Results enquiries'] },
-  { id: 'registration', title: 'Registration', subtitle: 'Registration support information.', items: ['Online registration', 'Payment verification', 'Department approval', 'Late registration notice'] },
-  { id: 'finance', title: 'Fees & finance', subtitle: 'Guidance for fees, payments, and financial support.', items: ['Tuition fee schedule', 'Payment verification', 'Bursary guidance', 'Finance office support'] },
+  { id: 'calendar', title: 'Academic calendar', subtitle: 'Key dates for planning the academic year.', items: [{ label: 'Semester start: 14 January' }, { label: 'Mid-semester break: 24 March' }, { label: 'Examination period: 15 May' }, { label: 'Results release: 25 May' }] },
+  { id: 'schools', title: 'Schools & departments', subtitle: 'Faculty and school structure for campus planning.', items: [{ label: 'School of Computer Science' }, { label: 'School of Business and Economics' }, { label: 'Faculty of Engineering', externalUrl: 'https://soe.dkut.ac.ke/' }, { label: 'School of Health Sciences' }] },
+  { id: 'courses', title: 'Courses', subtitle: 'Common academic support workflows.', items: [{ label: 'Course registration guidance' }, { label: 'Curriculum selection' }, { label: 'Timetable planning' }, { label: 'Academic advising' }] },
+  { id: 'examinations', title: 'Examinations', subtitle: 'Examination and assessment guidance.', items: [{ label: 'Exam timetable' }, { label: 'Revision resources' }, { label: 'Clearance requirements' }, { label: 'Results enquiries' }] },
+  { id: 'registration', title: 'Registration', subtitle: 'Registration support information.', items: [{ label: 'Online registration' }, { label: 'Payment verification' }, { label: 'Department approval' }, { label: 'Late registration notice' }] },
+  { id: 'finance', title: 'Fees & finance', subtitle: 'Guidance for fees, payments, and financial support.', items: [{ label: 'Tuition fee schedule' }, { label: 'Payment verification' }, { label: 'Bursary guidance' }, { label: 'Finance office support' }] },
 ]

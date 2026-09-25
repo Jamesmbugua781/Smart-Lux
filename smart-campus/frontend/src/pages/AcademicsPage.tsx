@@ -36,9 +36,15 @@ export function AcademicsPage() {
                   <p className="mt-2 text-sm text-slate-600">{section.subtitle}</p>
                   <ul className="mt-4 space-y-2">
                     {section.items.map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
+                      <li key={item.label} className="flex items-start gap-2 text-sm text-slate-700">
                         <span className="mt-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-primary)]" />
-                        <span>{item}</span>
+                        {item.externalUrl ? (
+                          <a href={item.externalUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-primary)]">
+                            {item.label}
+                          </a>
+                        ) : (
+                          <span>{item.label}</span>
+                        )}
                       </li>
                     ))}
                   </ul>
