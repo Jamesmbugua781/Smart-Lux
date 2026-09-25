@@ -23,6 +23,8 @@ export interface CampusLocation {
   area: string
   locationType: 'library' | 'school' | 'support' | 'registry' | 'ict'
   mapPosition: { left: string; top: string }
+  coordinates: { lat: number; lng: number }
+  buildingId?: string
   externalUrl?: string
 }
 

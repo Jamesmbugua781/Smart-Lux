@@ -1,6 +1,8 @@
-import { Search, X } from 'lucide-react'
-import { useMemo } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { ArrowRight, Search, X } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
+import { CampusMap } from '../components/CampusMap'
+import { MapLegend } from '../components/MapLegend'
 import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
 import { PageHeader } from '../components/ui/PageHeader'
@@ -8,11 +10,12 @@ import { LocationCard } from '../components/campus/LocationCard'
 import { Input } from '../components/ui/Input'
 import { EmptyState } from '../components/ui/EmptyState'
 import { campusLocations } from '../data/campusData'
+import type { CampusLocation } from '../types'
 
 export function CampusPage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const navigate = useNavigate()
   const query = searchParams.get('query') ?? ''
+  const [selectedLocation, setSelectedLocation] = useState<CampusLocation>(campusLocations[0])
 
   const filteredLocations = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase()
@@ -78,7 +81,8 @@ export function CampusPage() {
                   <LocationCard
                     key={location.id}
                     location={location}
-                    onViewDetails={(location) => navigate(`/map?location=${location.id}`)}
+                    isSelected={selectedLocation.id === location.id}
+                    onViewDetails={setSelectedLocation}
                   />
                 ))
               ) : (
@@ -86,6 +90,35 @@ export function CampusPage() {
               )}
             </div>
 
+            <div className="overflow-hidden rounded-[28px] border border-[#edf0f2] bg-white p-5 shadow-[0_18px_50px_rgba(11,31,58,0.05)]">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-[#0B1F3A]">Campus map</h2>
+                <span className="text-xs text-slate-500">{campusLocations.length} locations</span>
+              </div>
+
+              <div className="relative h-[460px] overflow-hidden rounded-2xl border border-[#edf0f2]">
+                <CampusMap
+                  locations={campusLocations}
+                  selectedLocation={selectedLocation}
+                  onSelectLocation={setSelectedLocation}
+                />
+
+                <div className="absolute bottom-6 left-6 right-6 rounded-2xl border border-[#edf0f2] bg-white/90 p-4 backdrop-blur-sm">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">Selected location</p>
+                  <h3 className="mt-2 font-semibold text-[#0B1F3A]">{selectedLocation.name}</h3>
+                  <p className="mt-1 text-sm text-slate-600">{selectedLocation.area}</p>
+                  <Link
+                    to={`/chat?question=${encodeURIComponent(`Tell me about ${selectedLocation.name}`)}`}
+                    className="action-link mt-3 text-sm"
+                  >
+                    Ask assistant
+                    <ArrowRight size={14} />
+                  </Link>
+                </div>
+              </div>
+
+              <MapLegend locations={campusLocations} onSelectLocation={setSelectedLocation} />
+            </div>
           </div>
         </div>
       </main>

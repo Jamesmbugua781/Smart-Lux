@@ -28,10 +28,16 @@ export function LocationCard({ location, isSelected = false, onViewDetails }: Lo
         </div>
       </div>
       {location.externalUrl ? (
-        <span className={actionClassName}>
+        <a
+          href={location.externalUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(event) => event.stopPropagation()}
+          className={actionClassName}
+        >
           {isSelected ? 'Selected' : 'View details'}
           <ArrowRight size={14} />
-        </span>
+        </a>
       ) : (
         <button
           type="button"
@@ -46,9 +52,20 @@ export function LocationCard({ location, isSelected = false, onViewDetails }: Lo
   )
 
   return location.externalUrl ? (
-    <a href={location.externalUrl} target="_blank" rel="noopener noreferrer" className={`${cardClassName} no-underline`}>
+    <div
+      className={cardClassName}
+      role="button"
+      tabIndex={0}
+      onClick={() => onViewDetails(location)}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          onViewDetails(location)
+        }
+      }}
+    >
       {cardContent}
-    </a>
+    </div>
   ) : (
     <div className={cardClassName}>{cardContent}</div>
   )
