@@ -9,6 +9,8 @@ export interface ChatMessageData {
     source?: string
     title: string
     type?: string
+    snippet?: string
+    confidence?: number
   }>
 }
 

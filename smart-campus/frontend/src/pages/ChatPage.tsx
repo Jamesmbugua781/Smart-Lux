@@ -27,11 +27,23 @@ export function ChatPage() {
     setInput('')
     setError('')
     setSuggestions([])
-    setMessages((current) => [...current, { id: crypto.randomUUID(), role: 'user', text: message, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }])
+
+    const userMessage: ChatMessageData = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      text: message,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    }
+    setMessages((current) => {
+      const updated = [...current, userMessage]
+      return updated
+    })
     setIsLoading(true)
 
     try {
-      const response = await sendChatMessage(message)
+      // Build history from existing messages for multi-turn memory
+      const history = messages.map((m) => ({ role: m.role, content: m.text }))
+      const response = await sendChatMessage(message, 'en', history)
       setMessages((current) => [...current, {
         id: crypto.randomUUID(),
         role: 'assistant',
@@ -45,7 +57,7 @@ export function ChatPage() {
     } finally {
       setIsLoading(false)
     }
-  }, [input, isLoading])
+  }, [input, isLoading, messages])
 
   const clearConversation = () => {
     submittedIncomingQuestion.current = ''

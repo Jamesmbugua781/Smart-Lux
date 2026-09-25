@@ -47,38 +47,16 @@ class EmbeddingService:
         if not text.strip():
             return [0.0] * 128
 
-        if self.provider == 'gemini' and self.gemini_client:
+        if self.gemini_client:
             try:
                 res = self.gemini_client.models.embed_content(
-                    model='text-embedding-004',
+                    model='embedding-001',
                     contents=text,
                 )
                 if res.embeddings and res.embeddings[0].values:
                     return list(res.embeddings[0].values)
             except Exception as err:
-                logger.warning('Gemini embedding API failed, using fallback embedding: %s', err)
-
-        elif self.provider == 'grok' and settings.GROK_API_KEY:
-            try:
-                headers = {
-                    'Authorization': f'Bearer {settings.GROK_API_KEY}',
-                    'Content-Type': 'application/json',
-                }
-                payload = {
-                    'input': text,
-                    'model': 'v1',
-                }
-                response = httpx.post(
-                    f'{settings.GROK_BASE_URL}/embeddings',
-                    headers=headers,
-                    json=payload,
-                    timeout=10.0,
-                )
-                if response.status_code == 200:
-                    data = response.json()
-                    return list(data['data'][0]['embedding'])
-            except Exception as err:
-                logger.warning('Grok embedding API failed, using fallback embedding: %s', err)
+                logger.debug('Gemini embedding API fallback used: %s', err)
 
         # Robust hashing fallback vector (dimension=128)
         return self._hash_embedding(text)
