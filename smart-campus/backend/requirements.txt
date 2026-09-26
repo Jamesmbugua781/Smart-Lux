@@ -10,10 +10,10 @@ google-genai>=1.38.0
 slowapi>=0.1.9
 bleach>=6.1.0
 pyjwt>=2.8.0
-passlib[bcrypt]>=1.7.4
 bcrypt>=4.0.0
 python-multipart>=0.0.9
 email-validator>=2.1.0
+alembic>=1.13.0
 
 
 # Testing

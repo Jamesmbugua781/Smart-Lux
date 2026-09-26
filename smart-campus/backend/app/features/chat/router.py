@@ -64,18 +64,41 @@ async def get_sessions(
 
 
 @router.get('/chat/sessions/{session_id}')
-async def get_session_messages(session_id: str, db: Session = Depends(get_db)):
+async def get_session_messages(
+    session_id: str,
+    db: Session = Depends(get_db),
+    user: Optional[User] = Depends(get_optional_current_user),
+):
     """Fetch all messages within a specific session thread."""
     session = db.query(ChatSession).filter(ChatSession.id == session_id).first()
     if not session:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Session not found')
+
+    # Ownership check: users may only read their own sessions
+    requesting_user_id = user.id if user else None
+    if session.user_id and session.user_id != requesting_user_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Access denied to this session')
+
     messages = ChatService.get_session_messages(session_id, db)
     return {'session': session.to_dict(), 'messages': messages}
 
 
 @router.delete('/chat/sessions/{session_id}')
-async def delete_session(session_id: str, db: Session = Depends(get_db)):
+async def delete_session(
+    session_id: str,
+    db: Session = Depends(get_db),
+    user: Optional[User] = Depends(get_optional_current_user),
+):
     """Delete a chat session and its message history."""
+    session = db.query(ChatSession).filter(ChatSession.id == session_id).first()
+    if not session:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Session not found')
+
+    # Ownership check: only the owning user (or guest) may delete
+    requesting_user_id = user.id if user else None
+    if session.user_id and session.user_id != requesting_user_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Access denied to this session')
+
     success = ChatService.delete_session(session_id, db)
     if not success:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Could not delete session')

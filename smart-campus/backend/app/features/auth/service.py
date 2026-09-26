@@ -91,7 +91,7 @@ class AuthService:
             email=req.email.lower(),
             password_hash=hashed,
             full_name=req.full_name or req.email.split('@')[0].capitalize(),
-            role=req.role if req.role in ('admin', 'super_admin') else 'student',
+            role='student',  # Always 'student' on public registration. Promote via admin tools only.
             auth_provider='email',
             institution_id=inst_id,
         )
