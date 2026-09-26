@@ -15,6 +15,7 @@ router, schemas, and service.  Security is applied globally:
 from __future__ import annotations
 
 import logging
+import logging.config
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
@@ -34,6 +35,15 @@ from app.features.campus.router import router as campus_router
 from app.features.campus.school_router import router as school_router
 from app.features.chat.router import router as chat_router
 from app.features.health.router import router as health_router
+
+# ---------------------------------------------------------------------------
+# Logging – configure once at app startup so all modules inherit this config
+# ---------------------------------------------------------------------------
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s | %(levelname)-8s | %(name)s | %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+)
 
 logger = logging.getLogger(__name__)
 
@@ -97,8 +107,8 @@ app.add_middleware(
     allow_origins=settings.CORS_ORIGINS,
     allow_origin_regex=r'https?://(localhost|127\.0\.0\.1)(:\d+)?',
     allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
+    allow_methods=['GET', 'POST', 'DELETE', 'OPTIONS'],  # only what is actually used
+    allow_headers=['Authorization', 'Content-Type'],     # no wildcard
 )
 
 # ---------------------------------------------------------------------------

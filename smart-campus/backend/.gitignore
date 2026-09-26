@@ -26,8 +26,9 @@ htmlcov/
 .vscode/
 .idea/
 
-# SQLite leftovers
+# SQLite – this project is PostgreSQL-only; these files should never exist in production
 *.db
+*.sqlite
 *.sqlite3
 
 # Build

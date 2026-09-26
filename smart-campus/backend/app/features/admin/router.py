@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, s
 from sqlalchemy.orm import Session
 
 from app.core.auth import get_current_user
+from app.core.config import settings
 from app.core.database import get_db
 from app.features.admin.schemas import CreateInstitutionRequest, DirectTextUploadRequest
 from app.features.admin.service import AdminService
@@ -54,13 +55,20 @@ async def upload_file_document(
     """Admin endpoint to upload file documents (TXT / JSON / PDF text)."""
     try:
         content_bytes = await file.read()
-        raw_content = content_bytes.decode('utf-8', errors='ignore')
     except Exception as err:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f'Could not read file content: {err}',
         )
 
+    # Guard against oversized uploads (DoS protection)
+    if len(content_bytes) > settings.MAX_UPLOAD_BYTES:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail=f'File too large. Maximum allowed size is {settings.MAX_UPLOAD_BYTES // (1024 * 1024)} MB.',
+        )
+
+    raw_content = content_bytes.decode('utf-8', errors='ignore')
     ext = file.filename.split('.')[-1].lower() if '.' in file.filename else 'txt'
     service = AdminService()
     return service.process_document_upload(

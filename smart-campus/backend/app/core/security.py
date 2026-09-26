@@ -4,10 +4,11 @@ core/security.py
 Central security utilities:
   - XSS sanitisation via bleach
   - SQL-injection guard (pattern blocker for raw string inputs)
-  - Security-header middleware (X-Content-Type-Options, CSP, etc.)
+  - Security-header middleware (X-Content-Type-Options, CSP, HSTS etc.)
 """
 from __future__ import annotations
 
+import html
 import re
 
 import bleach
@@ -39,9 +40,6 @@ _SQL_INJECTION_PATTERN = re.compile(
 )
 
 
-import html
-
-
 def has_sql_injection(value: str) -> bool:
     """Return True if the string contains suspicious SQL fragments."""
     return bool(_SQL_INJECTION_PATTERN.search(value))
@@ -50,7 +48,6 @@ def has_sql_injection(value: str) -> bool:
 def sanitise_input(value: str) -> str:
     """Apply XSS clean + SQL-injection check, raising ValueError on threat."""
     clean = sanitise_string(value)
-    # Unescape HTML entities (e.g. &amp; -> &) before SQL injection check
     unescaped = html.unescape(clean)
     if has_sql_injection(unescaped):
         raise ValueError('Input contains disallowed characters or SQL keywords.')
@@ -60,6 +57,7 @@ def sanitise_input(value: str) -> str:
 # ---------------------------------------------------------------------------
 # Security-Header Middleware
 # Adds defensive HTTP headers to every response.
+# HSTS is only sent in production to avoid breaking local dev.
 # ---------------------------------------------------------------------------
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next) -> Response:
@@ -71,4 +69,11 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers['Content-Security-Policy'] = (
             "default-src 'none'; frame-ancestors 'none';"
         )
+        # HSTS: tell browsers to always use HTTPS for 1 year (production only)
+        # Guard via env so local dev over plain HTTP doesn't break.
+        from app.core.config import settings  # local import to avoid circular
+        if settings.is_production:
+            response.headers['Strict-Transport-Security'] = (
+                'max-age=31536000; includeSubDomains'
+            )
         return response

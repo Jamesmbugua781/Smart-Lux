@@ -10,10 +10,10 @@ import logging
 from datetime import datetime, timedelta
 from typing import Optional
 
+import bcrypt
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
@@ -22,13 +22,13 @@ from app.features.campus.models import User
 
 logger = logging.getLogger(__name__)
 
-# Security Configuration
-SECRET_KEY = getattr(settings, 'SECRET_KEY', 'smart-lux-super-secret-jwt-key-2026')
+# ---------------------------------------------------------------------------
+# Security Configuration – SECRET_KEY comes from env via settings.
+# Never hard-code a secret in source code.
+# ---------------------------------------------------------------------------
 ALGORITHM = 'HS256'
-ACCESS_TOKEN_EXPIRE_DAYS = 30
+ACCESS_TOKEN_EXPIRE_DAYS = 7  # 7-day tokens; rotate SECRET_KEY to invalidate all
 security_bearer = HTTPBearer(auto_error=False)
-
-import bcrypt
 
 def hash_password(password: str) -> str:
     """Hash password using bcrypt (max 72 bytes)."""
@@ -51,17 +51,17 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    """Generate JWT Access Token."""
+    """Generate JWT Access Token signed with SECRET_KEY from environment."""
     to_encode = data.copy()
     expire = datetime.utcnow() + (expires_delta or timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS))
     to_encode.update({'exp': expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
 
 
 def decode_access_token(token: str) -> Optional[dict]:
     """Decode and validate JWT Access Token."""
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
         return payload
     except jwt.PyJWTError as err:
         logger.warning('Invalid JWT token: %s', err)
