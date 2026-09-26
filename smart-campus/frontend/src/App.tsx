@@ -9,10 +9,9 @@ import { AcademicsPage } from './pages/AcademicsPage'
 import { DocumentationPage } from './pages/DocumentationPage'
 import { TermsPage } from './pages/TermsPage'
 import { AdminDashboard } from './pages/AdminDashboard'
-import { Login } from './pages/Login'
-import { Profile } from './pages/Profile'
 import { NotFound } from './pages/NotFound'
 import { AuthProvider } from './components/auth/AuthProvider'
+import { MobileBottomNav } from './components/layout/MobileBottomNav'
 
 function App() {
   return (
@@ -28,10 +27,9 @@ function App() {
         <Route path="/docs" element={<DocumentationPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <MobileBottomNav />
     </AuthProvider>
   )
 }

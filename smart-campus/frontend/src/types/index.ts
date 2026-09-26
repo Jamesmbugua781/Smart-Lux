@@ -75,9 +75,4 @@ export interface Institution {
   is_active: boolean
 }
 
-export interface AuthTokenResponse {
-  access_token: string
-  token_type: string
-  user: User
-}
 

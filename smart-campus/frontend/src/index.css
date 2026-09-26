@@ -59,6 +59,13 @@ main {
   padding-bottom: 2rem;
 }
 
+/* On mobile, push content above the fixed bottom nav bar */
+@media (max-width: 767px) {
+  main {
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 
 button,
 input {
@@ -138,6 +145,11 @@ a {
   text-decoration-color: var(--color-primary);
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
+}
+
+/* Mobile bottom nav active tab top indicator */
+.mobile-bottom-nav a[aria-current='page'] span[aria-hidden='true'] {
+  position: absolute;
 }
 
 ::selection {

@@ -130,67 +130,8 @@ export async function fetchAcademics(): Promise<AcademicSection[]> {
 }
 
 // ---------------------------------------------------------------------------
-// Authentication & Multi-Tenant Institution APIs
+// Institution API (used by AuthProvider for the institution selector)
 // ---------------------------------------------------------------------------
-export async function loginApi(email: string, password: string): Promise<import('../types').AuthTokenResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
-  })
-  if (!response.ok) {
-    const data = await response.json().catch(() => ({}))
-    throw new Error(data.detail || 'Invalid login credentials')
-  }
-  return response.json()
-}
-
-export async function registerApi(
-  email: string,
-  password: string,
-  fullName: string,
-  institutionId = 'dekut',
-  role = 'student',
-): Promise<import('../types').AuthTokenResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, full_name: fullName, institution_id: institutionId, role }),
-  })
-  if (!response.ok) {
-    const data = await response.json().catch(() => ({}))
-    throw new Error(data.detail || 'Registration failed')
-  }
-  return response.json()
-}
-
-export async function googleAuthApi(
-  token: string,
-  email: string,
-  fullName = '',
-  avatarUrl = '',
-  institutionId = 'dekut',
-): Promise<import('../types').AuthTokenResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/auth/google`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ token, email, full_name: fullName, avatar_url: avatarUrl, institution_id: institutionId }),
-  })
-  if (!response.ok) {
-    const data = await response.json().catch(() => ({}))
-    throw new Error(data.detail || 'Google sign-in failed')
-  }
-  return response.json()
-}
-
-export async function fetchCurrentMe(authToken: string): Promise<import('../types').User> {
-  const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
-    headers: { Authorization: `Bearer ${authToken}` },
-  })
-  if (!response.ok) throw new Error('Failed to fetch user profile')
-  return response.json()
-}
-
 export async function fetchInstitutionsApi(): Promise<import('../types').Institution[]> {
   const response = await fetch(`${API_BASE_URL}/api/auth/institutions`)
   if (!response.ok) throw new Error('Failed to fetch institutions')
