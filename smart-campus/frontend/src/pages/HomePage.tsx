@@ -1,4 +1,4 @@
-import { ArrowRight, Globe2, Sparkles, Wifi } from 'lucide-react'
+import { ArrowRight, Globe2, Sparkles } from 'lucide-react'
 import type { FormEvent } from 'react'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'

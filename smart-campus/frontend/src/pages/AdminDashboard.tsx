@@ -35,22 +35,21 @@ export function AdminDashboard() {
   const [newInstDesc, setNewInstDesc] = useState('')
   const [isCreatingInst, setIsCreatingInst] = useState(false)
 
-  const loadDocuments = async () => {
-    try {
-      const docs = await fetchAdminDocsApi(activeInstitution, token)
-      setDocuments(docs || [])
-    } catch (err) {
-      console.warn('Failed to load documents:', err)
-    }
-  }
-
+  // Auth redirect — runs whenever user changes
   useEffect(() => {
     if (user && user.role !== 'admin' && user.role !== 'super_admin') {
       navigate('/', { replace: true })
-      return
     }
-    void loadDocuments()
-  }, [user, activeInstitution, token, navigate])
+  }, [user, navigate])
+
+  // Load documents whenever institution / token changes
+  useEffect(() => {
+    let cancelled = false
+    fetchAdminDocsApi(activeInstitution, token)
+      .then((docs) => { if (!cancelled) setDocuments(docs || []) })
+      .catch((err) => console.warn('Failed to load documents:', err))
+    return () => { cancelled = true }
+  }, [activeInstitution, token])
 
   if (!user || (user.role !== 'admin' && user.role !== 'super_admin')) {
     return (
@@ -84,9 +83,11 @@ export function AdminDashboard() {
       setMessage(`Document "${docTitle}" uploaded and indexed successfully into RAG database!`)
       setDocTitle('')
       setDocContent('')
-      void loadDocuments()
-    } catch (err: any) {
-      setError(err.message || 'Failed to upload document.')
+      fetchAdminDocsApi(activeInstitution, token)
+        .then((docs) => setDocuments(docs || []))
+        .catch((err) => console.warn('Failed to reload docs:', err))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to upload document.')
     } finally {
       setIsUploading(false)
     }
@@ -97,8 +98,8 @@ export function AdminDashboard() {
       await deleteAdminDocApi(docId, token)
       setDocuments((prev) => prev.filter((d) => d.id !== docId))
       setMessage('Document deleted and vector embeddings purged.')
-    } catch (err: any) {
-      setError(err.message || 'Failed to delete document.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete document.')
     }
   }
 
@@ -120,8 +121,8 @@ export function AdminDashboard() {
       setNewInstCity('')
       setNewInstDesc('')
       setActiveInstitution(instId)
-    } catch (err: any) {
-      setError(err.message || 'Failed to create institution.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create institution.')
     } finally {
       setIsCreatingInst(false)
     }

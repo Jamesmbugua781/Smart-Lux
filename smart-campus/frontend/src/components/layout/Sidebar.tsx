@@ -21,20 +21,15 @@ export function Sidebar({ currentSessionId, onNewConversation, onSelectSession }
   const [sessions, setSessions] = useState<ChatSessionItem[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
-  const loadSessions = async () => {
-    try {
-      setIsLoading(true)
-      const data = await fetchSessionsApi(activeInstitution, token)
-      setSessions(data || [])
-    } catch {
-      setSessions([])
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   useEffect(() => {
-    void loadSessions()
+    let cancelled = false
+    Promise.resolve()
+      .then(() => { if (!cancelled) setIsLoading(true) })
+      .then(() => fetchSessionsApi(activeInstitution, token))
+      .then((data) => { if (!cancelled) setSessions(data || []) })
+      .catch(() => { if (!cancelled) setSessions([]) })
+      .finally(() => { if (!cancelled) setIsLoading(false) })
+    return () => { cancelled = true }
   }, [token, activeInstitution, currentSessionId])
 
   const handleDeleteSession = async (e: React.MouseEvent, sessionId: string) => {

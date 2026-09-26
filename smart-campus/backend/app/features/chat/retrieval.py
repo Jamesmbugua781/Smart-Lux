@@ -194,8 +194,10 @@ class RetrievalService:
                 ' '.join(entry.get('keywords', [])),
             ]).lower()
 
-            # Count keyword hits
-            kw_score = float(sum(1 for term in terms if term in searchable))
+            searchable_words = set(re.findall(r'[\w]+', searchable))
+
+            # Count keyword hits (exact word matches)
+            kw_score = float(sum(1 for term in terms if term in searchable_words))
             if kw_score > max_kw_score:
                 max_kw_score = kw_score
 
