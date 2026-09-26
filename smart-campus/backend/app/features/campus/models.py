@@ -99,6 +99,21 @@ class SchoolKnowledge(Base):
     keywords = Column(JSON, nullable=False, default=list)
     embedding = Column(JSON, nullable=True)  # Dense vector embedding
 
+    def to_dict(self) -> dict:
+        return {
+            'id': self.id,
+            'institution_id': self.institution_id,
+            'school_code': self.school_code,
+            'school_name': self.school_name,
+            'category': self.category,
+            'name': self.name,
+            'description': self.description,
+            'location': self.location,
+            'source': self.source,
+            'keywords': self.keywords or [],
+            'embedding': self.embedding,
+        }
+
 class ChatSession(Base):
     __tablename__ = 'chat_sessions'
 

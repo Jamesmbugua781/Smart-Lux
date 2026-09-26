@@ -99,8 +99,8 @@ class AIService:
             )
 
         return (
-            "Hey there! I'm Smart Lux. I'm currently having a brief connection hiccup reaching the AI server, "
-            "but I'm right here! Feel free to ask about DeKUT courses, VC/Dean offices, library hours, or campus rules."
+            "I could not find verified university information regarding your query. "
+            "Please check with the campus administration or try rephrasing."
         )
 
     async def _generate_gemini_answer(self, prompt: str) -> str:

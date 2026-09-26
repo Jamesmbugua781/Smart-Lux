@@ -32,7 +32,10 @@ def _create_robust_engine():
             db_url,
             err,
         )
-        fallback_url = 'sqlite:///./smart_campus.db'
+        from pathlib import Path
+        backend_dir = Path(__file__).resolve().parent.parent.parent
+        fallback_path = backend_dir / 'smart_campus.db'
+        fallback_url = f'sqlite:///{fallback_path}'
         return create_engine(fallback_url, connect_args={'check_same_thread': False}, future=True)
 
 

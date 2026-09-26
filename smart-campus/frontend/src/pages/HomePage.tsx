@@ -1,15 +1,30 @@
-import { ArrowRight, Globe2, Sparkles } from 'lucide-react'
+import { ArrowRight, Globe2, Sparkles, Wifi } from 'lucide-react'
 import type { FormEvent } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
 import { SuggestionChip } from '../components/chat/SuggestionChip'
 import { popularQuestions } from '../data/campusData'
+import { fetchCampusLocations, fetchHealth } from '../services/api'
 
 export function HomePage() {
   const [question, setQuestion] = useState('')
+  const [backendStatus, setBackendStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking')
+  const [locationCount, setLocationCount] = useState<number>(6)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    fetchHealth()
+      .then(() => setBackendStatus('connected'))
+      .catch(() => setBackendStatus('disconnected'))
+
+    fetchCampusLocations()
+      .then((locs) => {
+        if (locs.length > 0) setLocationCount(locs.length)
+      })
+      .catch(() => {})
+  }, [])
 
   const openAssistant = (message: string) => {
     const trimmedMessage = message.trim()
@@ -90,7 +105,23 @@ export function HomePage() {
                   <div className="flex items-center justify-between border-b border-[#dfeafc] pb-4">
                     <div>
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">Campus intelligence</p>
-                      <p className="mt-1 flex items-center gap-2 text-lg font-semibold text-[#0B1F33]"><span className="h-2.5 w-2.5 rounded-full bg-[var(--color-status)]" aria-hidden="true" />Connected</p>
+                      <p className="mt-1 flex items-center gap-2 text-lg font-semibold text-[#0B1F33]">
+                        <span
+                          className={`h-2.5 w-2.5 rounded-full ${
+                            backendStatus === 'connected'
+                              ? 'bg-[var(--color-status)] animate-pulse'
+                              : backendStatus === 'checking'
+                              ? 'bg-amber-400 animate-pulse'
+                              : 'bg-red-500'
+                          }`}
+                          aria-hidden="true"
+                        />
+                        {backendStatus === 'connected'
+                          ? 'Backend Connected'
+                          : backendStatus === 'checking'
+                          ? 'Connecting to API...'
+                          : 'API Offline'}
+                      </p>
                     </div>
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-primary-soft)] text-[var(--color-primary)]">
                       <Globe2 size={18} />
@@ -100,17 +131,17 @@ export function HomePage() {
                   <div className="space-y-4 rounded-2xl border border-[#dfeafc] bg-white/80 p-4">
                     <div className="grid gap-4 border-b border-[#dfeafc] pb-4 text-sm text-slate-600 sm:grid-cols-2">
                       <div>
-                        <p className="text-[28px] font-bold leading-none text-[#0B1F33]">12</p>
-                        <p className="mt-1">Campus services</p>
+                        <p className="text-[28px] font-bold leading-none text-[#0B1F33]">4</p>
+                        <p className="mt-1">Active Universities</p>
                       </div>
                       <div>
-                        <p className="text-[28px] font-bold leading-none text-[#0B1F33]">48</p>
-                        <p className="mt-1">Locations</p>
+                        <p className="text-[28px] font-bold leading-none text-[#0B1F33]">{locationCount}</p>
+                        <p className="mt-1">Indexed Locations</p>
                       </div>
                     </div>
                     <div className="text-sm text-slate-600">
-                      <p className="font-semibold text-[#0B1F33]">Verified answers</p>
-                      <p>Live campus guidance available</p>
+                      <p className="font-semibold text-[#0B1F33]">Verified RAG Retrieval</p>
+                      <p>Hybrid Vector + Keyword Answers</p>
                     </div>
                   </div>
 

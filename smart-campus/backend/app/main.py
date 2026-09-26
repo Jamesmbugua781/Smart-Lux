@@ -23,6 +23,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 
+from contextlib import asynccontextmanager
 from app.core.config import settings
 from app.core.security import SecurityHeadersMiddleware
 from app.features.academics.router import router as academics_router
@@ -41,10 +42,28 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 limiter = Limiter(key_func=get_remote_address, default_limits=[settings.RATE_LIMIT])
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for database initialization and default seeding."""
+    try:
+        from app.core.database import engine, Base, SessionLocal
+        import app.features.campus.models
+        from app.features.auth.service import ensure_default_institutions
+        Base.metadata.create_all(bind=engine)
+        with SessionLocal() as db:
+            ensure_default_institutions(db)
+        logger.info('Database tables verified and seeded successfully on startup.')
+    except Exception as err:
+        logger.error('Startup database initialization error: %s', err)
+    yield
+
+
 app = FastAPI(
     title='Smart Lux API',
     version='0.1.0',
     description='Backend API for Smart Lux assistant platform.',
+    lifespan=lifespan,
 )
 
 # -- State required by slowapi --
@@ -76,6 +95,7 @@ app.add_middleware(SecurityHeadersMiddleware)          # security headers on eve
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
+    allow_origin_regex=r'https?://(localhost|127\.0\.0\.1)(:\d+)?',
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],

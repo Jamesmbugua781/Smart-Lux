@@ -49,7 +49,7 @@ class ChatService:
                 top = context[0]
                 result = f"Here is what I found on campus for your query: **{top.get('name')}** - {top.get('description')} (Location: {top.get('location', 'N/A')})."
             else:
-                result = "Hey there! I'm Smart Lux. Feel free to ask me about DeKUT courses, VC/Dean offices, past papers, rules, or campus locations!"
+                result = "I could not find verified university information regarding your query. Please check with the campus administration or try rephrasing."
 
         # Citation & Source Attribution
         if context:
@@ -67,7 +67,7 @@ class ChatService:
         else:
             sources = []
             is_verified = False
-            confidence = 0.80
+            confidence = 0.0
 
         session_id = request.session_id
 

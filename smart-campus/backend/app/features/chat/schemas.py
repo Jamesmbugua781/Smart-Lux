@@ -66,7 +66,7 @@ class ChatRequest(BaseModel):
     def message_must_be_safe(cls, value: str) -> str:
         stripped = (value or '').strip()
         if not stripped:
-            return 'Hello'
+            raise ValueError('Message cannot be blank')
         return sanitise_input(stripped)
 
     @field_validator('language')

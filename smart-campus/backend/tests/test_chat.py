@@ -38,7 +38,7 @@ def test_chat_rejects_sql_injection():
 
 def test_chat_endpoint_uses_chat_service(monkeypatch):
     class FakeChatService:
-        async def generate_response(self, request):
+        async def generate_response(self, request, *args, **kwargs):
             return ChatResponse(
                 message=f'Answer for {request.message}',
                 language=request.language,
@@ -89,7 +89,7 @@ def test_multi_turn_history_in_chat_request():
         ],
     }
     class HistoryCheckingService:
-        async def generate_response(self, request):
+        async def generate_response(self, request, *args, **kwargs):
             assert len(request.history) == 2
             assert request.history[0].role == 'user'
             assert request.history[1].role == 'assistant'

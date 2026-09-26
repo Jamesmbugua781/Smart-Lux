@@ -219,7 +219,7 @@ class RetrievalService:
             scored_entries.append((combined, kw_score, vec_score, entry))
 
         # Thresholding: If no keywords matched and vector score is low/unfocused, return empty
-        if max_kw_score == 0 and max_vec_score < 0.45:
+        if max_kw_score == 0 and max_vec_score < 0.55:
             return []
 
         # Sort descending by combined score
@@ -229,6 +229,8 @@ class RetrievalService:
         results = []
         for combined, kw, vec, entry in scored_entries:
             if max_kw_score > 0 and kw == 0 and vec < 0.40:
+                continue
+            if max_kw_score == 0 and vec < 0.55:
                 continue
             results.append(entry)
 
